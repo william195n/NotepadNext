@@ -14,6 +14,7 @@ add features:
 10. feat: add UTF-16 support with automatic conversion to UTF-8 (both LE and BE)
 11. feat: add unified ErrorHandler for consistent error reporting (structured logging, user-friendly messages)
 12. fix: add type validation for session bookmark restoration (prevents crashes from corrupted session data)
+13. feat: add comprehensive debug logging for translation system (helps diagnose Qt locale bug)
 
 -----------------------------------------------------------------
 git add src/dialogs/MainWindow.cpp
