@@ -7,6 +7,7 @@ add features:
 3. Enable session restoration and snapshots by default
 4. feat: change save prompt to Yes/No/Cancel and add Y/N/C shortcuts
 5. perf: optimize SmartHighlighter for large files (150ms delay timer + visible area only for files >1MB)
+6. feat: make max recent files count configurable (default 10)
 
 -----------------------------------------------------------------
 git add src/dialogs/MainWindow.cpp

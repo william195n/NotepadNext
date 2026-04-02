@@ -122,4 +122,6 @@ public:
     DEFINE_SETTING(SmartHighlightFileSizeThresholdKB, smartHighlightFileSizeThresholdKB, int)
     DEFINE_SETTING(ShowLineNumbers, showLineNumbers, bool)
     DEFINE_SETTING(AutoCompletion, autoCompletion, bool)
+
+    DEFINE_SETTING(MaxRecentFiles, maxRecentFiles, int)
 };

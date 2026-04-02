@@ -23,12 +23,14 @@
 #include <QObject>
 #include <QList>
 
+class ApplicationSettings;
+
 class RecentFilesListManager : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit RecentFilesListManager(QObject *parent = Q_NULLPTR);
+    explicit RecentFilesListManager(ApplicationSettings *settings, QObject *parent = Q_NULLPTR);
 
     QString mostRecentFile() const;
     QStringList fileList() const;
@@ -42,6 +44,7 @@ public slots:
     void clear();
 
 private:
+    ApplicationSettings *settings;
     QStringList recentFiles;
 };
 

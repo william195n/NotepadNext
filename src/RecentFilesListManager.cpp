@@ -18,9 +18,11 @@
 
 
 #include "RecentFilesListManager.h"
+#include "ApplicationSettings.h"
 
-RecentFilesListManager::RecentFilesListManager(QObject *parent) :
-    QObject(parent)
+RecentFilesListManager::RecentFilesListManager(ApplicationSettings *settings, QObject *parent) :
+    QObject(parent),
+    settings(settings)
 {
 }
 
@@ -31,8 +33,9 @@ void RecentFilesListManager::addFile(const QString &filePath)
     // Attempt to remove it first to make sure it is not added twice
     removeFile(filePath);
 
-    // Set a limit on how many can be in the list
-    if (recentFiles.size() >= 10) {
+    // Set a limit on how many can be in the list (configurable)
+    int maxFiles = settings->maxRecentFiles();
+    if (recentFiles.size() >= maxFiles) {
         recentFiles.removeLast();
     }
 

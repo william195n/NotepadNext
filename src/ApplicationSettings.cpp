@@ -74,3 +74,5 @@ CREATE_SETTING(Editor, SmartHighlightCaseSensitive, smartHighlightCaseSensitive,
 CREATE_SETTING(Editor, SmartHighlightFileSizeThresholdKB, smartHighlightFileSizeThresholdKB, int, 1024)
 CREATE_SETTING(Editor, ShowLineNumbers, showLineNumbers, bool, true)
 CREATE_SETTING(Editor, AutoCompletion, autoCompletion, bool, false)
+
+CREATE_SETTING(App, MaxRecentFiles, maxRecentFiles, int, 10)
