@@ -49,6 +49,7 @@ public:
         BomType bom = BomType::None;
         qint64 totalBytesRead = 0;
         bool isReadOnly = false;
+        bool wasConverted = false; // True if encoding conversion was performed
     };
 
     /**
@@ -82,10 +83,25 @@ public:
      */
     static void removeBom(QByteArray &data, BomType bom);
 
+    /**
+     * @brief Convert UTF-16 data to UTF-8
+     * @param data The UTF-16 data (including BOM)
+     * @param bom The BOM type (must be Utf16LE or Utf16BE)
+     * @return Converted UTF-8 data, or empty QByteArray on error
+     */
+    static QByteArray convertUtf16ToUtf8(const QByteArray &data, BomType bom);
+
 private:
     static const QByteArray BOM_UTF8;
     static const QByteArray BOM_UTF16LE;
     static const QByteArray BOM_UTF16BE;
+
+    /**
+     * @brief Load UTF-16 file with conversion
+     */
+    static FileMetadata* loadUtf16File(QFile &file, BomType bomType,
+                                        std::function<bool(const QByteArray&)> chunkHandler,
+                                        int chunkSize);
 };
 
 #endif // FILELOADER_H

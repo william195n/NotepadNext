@@ -673,8 +673,9 @@ bool ScintillaNext::readFromDisk(QFile &file)
         return false;
     }
 
-    qInfo("Successfully loaded file: %lld bytes, BOM type: %d",
-          metadata->totalBytesRead, static_cast<int>(bomType));
+    qInfo("Successfully loaded file: %lld bytes, BOM type: %d%s",
+          metadata->totalBytesRead, static_cast<int>(bomType),
+          metadata->wasConverted ? " (converted from UTF-16)" : "");
 
     delete metadata;
     return true;
