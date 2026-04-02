@@ -18,6 +18,7 @@
 
 
 #include "AutoCompletion.h"
+#include "NotepadNextApplication.h"
 
 #include <QSet>
 
@@ -47,8 +48,12 @@ void AutoCompletion::showAutoCompletion()
     int startPos = editor->wordStartPosition(curPos, true);
     int endPos = editor->wordEndPosition(curPos, true);
 
+    // Get minimum character threshold from settings (configurable: 1-5, default: 3)
+    NotepadNextApplication *app = qobject_cast<NotepadNextApplication *>(qApp);
+    int minChars = app->getSettings()->autoCompletionMinChars();
+
     // Need a minimum number of characters to trigger auto completion
-    if ((curPos - startPos) < 3)
+    if ((curPos - startPos) < minChars)
         return;
 
     const QByteArray current_word = editor->get_text_range(startPos, curPos);
