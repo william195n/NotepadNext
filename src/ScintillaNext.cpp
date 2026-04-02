@@ -18,6 +18,7 @@
 
 
 #include "ScintillaNext.h"
+#include "FileLoader.h"
 #include "Finder.h"
 #include "ScintillaCommenter.h"
 
@@ -613,86 +614,69 @@ void ScintillaNext::dropEvent(QDropEvent *event)
 
 bool ScintillaNext::readFromDisk(QFile &file)
 {
-    if (!file.exists()) {
-        qWarning("Cannot read \"%s\": doesn't exist", qUtf8Printable(file.fileName()));
-        return false;
+    // Allocate buffer space based on file size
+    QFileInfo fileInfo(file);
+    if (fileInfo.exists()) {
+        allocate(fileInfo.size());
     }
-
-    if (!file.open(QIODevice::ReadOnly)) {
-        qWarning("QFile::open() failed when opening \"%s\" - error code %d: %s", qUtf8Printable(file.fileName()), file.error(), qUtf8Printable(file.errorString()));
-        return false;
-    }
-
-    // TODO: figure out what to do if "size" is too big
-    allocate(file.size());
 
     // Turn off undo collection and block signals during loading
     setUndoCollection(false);
     blockSignals(true);
-    // TODO disable notifications
-    // modEventMask(SC_MOD_NONE)?
 
-    QByteArray chunk;
-    qint64 bytesRead;
-
-    bool first_read = true;
-    do {
-        // Try to read as much as possible
-        chunk.resize(CHUNK_SIZE);
-        bytesRead = file.read(chunk.data(), CHUNK_SIZE);
-        chunk.resize(bytesRead);
-
-        qDebug("Read %lld bytes", bytesRead);
-
-        // TODO: this needs moved out of here. Would make much more sense to have a class (or classes)
-        // responsible for handling low level situations like this to do things like:
-        // - determine encoding
-        // - determine space vs tabs
-        // - determine indentation size
-
-        if (first_read) {
-            first_read = false;
-
-            bomType = detectBom(chunk);
-
-            if (bomType != BomType::None) {
-                qDebug("BOM found");
-            }
-
-            if (bomType == BomType::Utf8) {
-                chunk.remove(0, bomLength(bomType));
-            }
-
-            if (bomType == BomType::Utf16BE || bomType == BomType::Utf16LE) {
-                // Um...ignore this for now?
-            }
-        }
-
+    // Use FileLoader to handle the actual file reading
+    FileLoader::FileMetadata *metadata = FileLoader::loadFile(file, [this](const QByteArray &chunk) {
+        // Append each chunk to the editor
         appendText(chunk.size(), chunk.constData());
-    } while (!file.atEnd() && status() == SC_STATUS_OK);
 
-    file.close();
+        // Check Scintilla status
+        return status() == SC_STATUS_OK;
+    }, CHUNK_SIZE);
 
-    // Restore it back
+    // Restore settings
     this->blockSignals(false);
     setUndoCollection(true);
-    // modEventMask(SC_MODEVENTMASKALL)?
 
-    if (status() != SC_STATUS_OK) {
-        qWarning("something bad happened in document->add_data() %ld", status());
+    // Handle load failure
+    if (!metadata) {
+        qWarning("ScintillaNext: Failed to load file");
         return false;
     }
 
-    if (bytesRead == -1) {
-        qWarning("Something bad happened when reading disk %d %s", file.error(), qUtf8Printable(file.errorString()));
-        return false;
+    // Map FileLoader::BomType to ScintillaNext::BomType
+    switch (metadata->bom) {
+    case FileLoader::BomType::Utf8:
+        bomType = BomType::Utf8;
+        break;
+    case FileLoader::BomType::Utf16LE:
+        bomType = BomType::Utf16LE;
+        break;
+    case FileLoader::BomType::Utf16BE:
+        bomType = BomType::Utf16BE;
+        break;
+    case FileLoader::BomType::None:
+    default:
+        bomType = BomType::None;
+        break;
     }
 
-    if (!QFileInfo(file).isWritable()) {
+    // Set read-only if needed
+    if (metadata->isReadOnly) {
         qInfo("Setting file as read-only");
         setReadOnly(true);
     }
 
+    // Check for errors
+    if (status() != SC_STATUS_OK) {
+        qWarning("Scintilla error occurred during file load: %ld", status());
+        delete metadata;
+        return false;
+    }
+
+    qInfo("Successfully loaded file: %lld bytes, BOM type: %d",
+          metadata->totalBytesRead, static_cast<int>(bomType));
+
+    delete metadata;
     return true;
 }
 

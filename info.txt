@@ -10,6 +10,7 @@ add features:
 6. feat: make max recent files count configurable (default 10)
 7. feat: add large file warning protection (default 100MB threshold)
 8. fix: improve memory management (use std::unique_ptr in QRegexSearch, fix MacroManager memory leaks)
+9. refactor: extract FileLoader class for better separation of concerns (BOM detection, encoding, chunked reading)
 
 -----------------------------------------------------------------
 git add src/dialogs/MainWindow.cpp

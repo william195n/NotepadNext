@@ -15,6 +15,7 @@ qt_add_executable(NotepadNext
 	EditorManager.h
 	EditorPrintPreviewRenderer.h
 	FileDialogHelpers.h
+	FileLoader.h
 	Finder.h
 	FocusWatcher.h
 	HtmlConverter.h
@@ -63,6 +64,7 @@ qt_add_executable(NotepadNext
 	EditorManager.cpp
 	EditorPrintPreviewRenderer.cpp
 	FileDialogHelpers.cpp
+	FileLoader.cpp
 	Finder.cpp
 	HtmlConverter.cpp
 	IFaceTable.cpp
