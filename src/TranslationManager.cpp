@@ -68,28 +68,90 @@ QString TranslationManager::FormatLocaleTerritoryAndLanguage(QLocale &locale)
 void TranslationManager::loadSystemDefaultTranslation()
 {
     // The wrong translation file may be loaded when passing Locale::system() to loadTranslation function, e.g. "zh_CN" translation file will be loaded when the locale is "en_US". It's probably a Qt bug.
-    loadTranslation(QLocale(QLocale::system().name()));
+
+    QLocale systemLocale = QLocale::system();
+    QString systemLocaleName = systemLocale.name();
+
+    // Debug logging to help diagnose Qt locale bug
+    qInfo() << "=== System Locale Detection ===";
+    qInfo() << "  System locale name:" << systemLocaleName;
+    qInfo() << "  Language:" << QLocale::languageToString(systemLocale.language());
+#if QT_VERSION < QT_VERSION_CHECK(6, 2, 0)
+    qInfo() << "  Country:" << QLocale::countryToString(systemLocale.country());
+#else
+    qInfo() << "  Territory:" << QLocale::territoryToString(systemLocale.territory());
+#endif
+    qInfo() << "  Script:" << QLocale::scriptToString(systemLocale.script());
+    qInfo() << "  UI Languages:" << systemLocale.uiLanguages();
+
+    // Create new QLocale from name to work around Qt bug
+    QLocale actualLocale(systemLocaleName);
+    qInfo() << "  Actual locale used for loading:" << actualLocale.name();
+
+    if (actualLocale.name() != systemLocaleName) {
+        qWarning() << "  WARNING: Locale name mismatch! System:" << systemLocaleName
+                   << "Actual:" << actualLocale.name();
+    }
+
+    loadTranslation(actualLocale);
 }
 
 void TranslationManager::loadTranslation(QLocale locale)
 {
     qInfo(Q_FUNC_INFO);
 
+    qInfo() << "=== Loading Translation ===";
+    qInfo() << "  Locale:" << locale.name();
+    qInfo() << "  Language:" << QLocale::languageToString(locale.language());
+    qInfo() << "  Translation path:" << path;
+
     const QStringList filenames{QStringList{QApplication::applicationName(), "qt", "qtbase"}};
+    int successCount = 0;
+    int failureCount = 0;
 
     for (const auto& filename : filenames) {
+        qInfo() << "  Attempting to load:" << filename;
+
         std::unique_ptr<QTranslator> translator = std::make_unique<QTranslator>();
 
         if (translator->load(locale, filename, QStringLiteral("_"), path)) {
+            QString filePath = translator->filePath();
+            qInfo() << "    ✓ Loaded file:" << filePath;
+
             if (QCoreApplication::installTranslator(translator.get())) {
-                qInfo() << "Loaded translation" << translator.get()->filePath();
+                qInfo() << "    ✓ Installed translator successfully";
                 translators.append(translator.release());
+                successCount++;
+            } else {
+                qWarning() << "    ✗ Failed to install translator for:" << filePath;
+                failureCount++;
             }
+        } else {
+            qInfo() << "    ✗ Translation file not found or failed to load";
+            failureCount++;
         }
+    }
+
+    qInfo() << "=== Translation Loading Summary ===";
+    qInfo() << "  Successfully loaded:" << successCount << "file(s)";
+    qInfo() << "  Failed to load:" << failureCount << "file(s)";
+
+    if (successCount == 0) {
+        qWarning() << "  WARNING: No translation files were loaded! Application will use default (English) strings.";
     }
 }
 
 void TranslationManager::loadTranslation(QString localeName)
 {
-    loadTranslation(QLocale(localeName));
+    qInfo() << "Loading translation by locale name:" << localeName;
+
+    QLocale locale(localeName);
+
+    // Verify the locale was created correctly
+    if (locale.name() != localeName && locale.name() != "C") {
+        qWarning() << "  Locale name mismatch! Requested:" << localeName
+                   << "Created:" << locale.name();
+    }
+
+    loadTranslation(locale);
 }
