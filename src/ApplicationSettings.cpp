@@ -76,3 +76,4 @@ CREATE_SETTING(Editor, ShowLineNumbers, showLineNumbers, bool, true)
 CREATE_SETTING(Editor, AutoCompletion, autoCompletion, bool, false)
 
 CREATE_SETTING(App, MaxRecentFiles, maxRecentFiles, int, 10)
+CREATE_SETTING(App, LargeFileSizeWarningMB, largeFileSizeWarningMB, int, 100)

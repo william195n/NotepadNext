@@ -124,4 +124,5 @@ public:
     DEFINE_SETTING(AutoCompletion, autoCompletion, bool)
 
     DEFINE_SETTING(MaxRecentFiles, maxRecentFiles, int)
+    DEFINE_SETTING(LargeFileSizeWarningMB, largeFileSizeWarningMB, int)
 };

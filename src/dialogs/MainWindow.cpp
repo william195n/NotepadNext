@@ -1081,6 +1081,32 @@ void MainWindow::openFileList(const QStringList &fileNames)
                 }
             }
             else {
+                // Check file size before opening to protect against memory exhaustion
+                qint64 fileSizeBytes = fileInfo.size();
+                qint64 warningThresholdBytes = static_cast<qint64>(app->getSettings()->largeFileSizeWarningMB()) * 1024 * 1024;
+
+                if (fileSizeBytes >= warningThresholdBytes) {
+                    double fileSizeMB = fileSizeBytes / (1024.0 * 1024.0);
+                    QString message = tr("The file <b>%1</b> is very large (%.2f MB).<br><br>"
+                                        "Opening large files may consume significant memory and cause the application to slow down or become unresponsive.<br><br>"
+                                        "Do you want to continue?")
+                                        .arg(fileInfo.fileName())
+                                        .arg(fileSizeMB);
+
+                    QMessageBox msgBox(this);
+                    msgBox.setWindowTitle(tr("Large File Warning"));
+                    msgBox.setText(message);
+                    msgBox.setIcon(QMessageBox::Warning);
+                    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+                    msgBox.setDefaultButton(QMessageBox::No);
+
+                    int reply = msgBox.exec();
+
+                    if (reply != QMessageBox::Yes) {
+                        continue;
+                    }
+                }
+
                 editor = app->getEditorManager()->createEditorFromFile(filePath);
             }
         }

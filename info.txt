@@ -8,6 +8,7 @@ add features:
 4. feat: change save prompt to Yes/No/Cancel and add Y/N/C shortcuts
 5. perf: optimize SmartHighlighter for large files (150ms delay timer + visible area only for files >1MB)
 6. feat: make max recent files count configurable (default 10)
+7. feat: add large file warning protection (default 100MB threshold)
 
 -----------------------------------------------------------------
 git add src/dialogs/MainWindow.cpp
@@ -60,6 +61,63 @@ git push my-fork master
 访问你的 GitHub 页面：https://github.com/william195n/NotepadNext/actions。
 你应该能看到一个正在运行的任务。
 等它变绿（通常需要 10-15 分钟），你就可以在 Artifacts 区域下载到编译好的 .exe 或 Zip 文件了。
+
+
+--------
+2. 文件读取逻辑耦合度高
+src/ScintillaNext.cpp:626-651
+
+问题：BOM 检测、编码识别、缩进检测都混在文件读取函数中
+TODO 注释：需要重构为独立的类来处理这些低级操作
+建议：创建 FileLoader 类，职责分离
+
+3. 自动补全触发阈值硬编码
+src/decorators/AutoCompletion.cpp:51
+
+if ((curPos - startPos) < 3)  // 硬编码的 3 字符
+    return;
+问题：最小触发字符数硬编码为 3
+建议：移到设置中，让用户可配置（1-5 字符）
+
+4. 缺少大文件保护机制
+src/ScintillaNext.cpp:626
+
+// TODO: figure out what to do if "size" is too big
+allocate(file.size());
+问题：没有检查文件大小上限，可能导致内存耗尽
+建议：添加文件大小警告（如 > 100MB 提示用户）
+
+5. UTF-16 编码未完全支持
+src/ScintillaNext.cpp:666-668
+
+if (bomType == BomType::Utf16BE || bomType == BomType::Utf16LE) {
+    // Um...ignore this for now?
+}
+问题：UTF-16 文件检测到但未处理
+建议：要么实现转换，要么明确提示用户不支持
+
+6. 内存管理
+现状：代码中大量使用 new 分配（112 处），大部分依赖 Qt 父对象管理
+风险：部分对象如果父对象设置不当可能泄漏
+建议：考虑使用 std::unique_ptr 或 QScopedPointer
+
+7. 错误处理不一致
+问题：有些地方用 qWarning() 记录错误但继续执行，有些地方返回 false
+建议：统一错误处理策略，特别是文件操作失败时
+💡 用户体验改进建议
+
+9. 翻译系统的 Qt Bug
+src/TranslationManager.cpp:70
+
+注释：提到 Qt 有 bug，传 Locale::system() 可能加载错误的翻译
+建议：添加语言选择的调试日志，方便排查
+
+10. Session 恢复的类型转换
+src/SessionManager.cpp:401
+
+QVariantListToQList(settings.value("BookMarks").toList());
+// 注释说可能是 Qt bug
+建议：添加类型检查，避免崩溃
 
 --------others
 https://cudatext.github.io/download.html
