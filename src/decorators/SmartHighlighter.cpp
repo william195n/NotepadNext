@@ -35,13 +35,33 @@ SmartHighlighter::SmartHighlighter(ScintillaNext *editor) :
     editor->indicSetOutlineAlpha(indicator, 150);
     editor->indicSetAlpha(indicator, 100);
     editor->indicSetUnder(indicator, true);
+
+    // Create a timer to delay highlighting and avoid frequent updates
+    highlightTimer = new QTimer(this);
+    highlightTimer->setSingleShot(true);
+    highlightTimer->setInterval(150); // 150ms delay
+    connect(highlightTimer, &QTimer::timeout, this, &SmartHighlighter::highlightCurrentView);
 }
 
 void SmartHighlighter::notify(const NotificationData *pscn)
 {
     if (pscn->nmhdr.code == Notification::UpdateUI && (FlagSet(pscn->updated, Update::Content) || FlagSet(pscn->updated, Update::Selection))) {
-        highlightCurrentView();
+        scheduleHighlight();
     }
+}
+
+void SmartHighlighter::scheduleHighlight()
+{
+    // Restart timer to delay highlighting
+    highlightTimer->start();
+}
+
+bool SmartHighlighter::shouldHighlightWholeFile() const
+{
+    NotepadNextApplication *app = qobject_cast<NotepadNextApplication *>(qApp);
+    int thresholdKB = app->getSettings()->smartHighlightFileSizeThresholdKB();
+    int fileSizeKB = editor->length() / 1024;
+    return fileSizeKB < thresholdKB;
 }
 
 void SmartHighlighter::highlightCurrentView()
@@ -73,24 +93,32 @@ void SmartHighlighter::highlightCurrentView()
 
     const QByteArray selText = editor->get_text_range(selectionStart, selectionEnd);
 
-    // TODO: Handle large files. By default Notepad++ only monitors the text on screen. However,
-    // that will not work when using a highlighted scroll bar. Testing with small files seems to
-    // have minimal impact. For large files, Qt can have a timer set to 0 to do heavier processing.
-    // Using threads seems to be a bit overkill and too burdensome to do it properly.
-
-    //const int startLine = editor->firstVisibleLine();
-    //const int linesOnScreen = editor->linesOnScreen();
-    //const int startPos = editor->positionFromLine(startLine);
-    //const int endPos = editor->lineEndPosition(startLine + linesOnScreen);
-
-    // TODO: skip hidden or folded lines?
-
-    Sci_TextToFind ttf {{0, (Sci_PositionCR)editor->length()}, selText.constData(), {-1, -1}};
     NotepadNextApplication *app = qobject_cast<NotepadNextApplication *>(qApp);
     int flags = SCFIND_WHOLEWORD;
     if (app->getSettings()->smartHighlightCaseSensitive()) {
         flags |= SCFIND_MATCHCASE;
     }
+
+    // Determine search range based on file size
+    Sci_PositionCR searchStart, searchEnd;
+    if (shouldHighlightWholeFile()) {
+        // Small file: highlight whole file (supports HighlightedScrollBar)
+        searchStart = 0;
+        searchEnd = (Sci_PositionCR)editor->length();
+    } else {
+        // Large file: only highlight visible area for performance
+        const int firstLine = editor->firstVisibleLine();
+        const int linesOnScreen = editor->linesOnScreen();
+        // Add some buffer lines above and below for smooth scrolling
+        const int bufferLines = 10;
+        const int startLine = qMax(0, firstLine - bufferLines);
+        const int endLine = qMin(editor->lineCount() - 1, firstLine + linesOnScreen + bufferLines);
+
+        searchStart = editor->positionFromLine(startLine);
+        searchEnd = editor->lineEndPosition(endLine);
+    }
+
+    Sci_TextToFind ttf {{searchStart, searchEnd}, selText.constData(), {-1, -1}};
 
     while (editor->send(SCI_FINDTEXT, flags, (sptr_t)&ttf) != -1) {
         editor->indicatorFillRange(ttf.chrgText.cpMin, ttf.chrgText.cpMax - ttf.chrgText.cpMin);

@@ -5,7 +5,8 @@ add features:
 1. Smart Highlighting Case-insensitive;
 2. Add option to toggle auto-completion, default to disabled
 3. Enable session restoration and snapshots by default
-
+4. feat: change save prompt to Yes/No/Cancel and add Y/N/C shortcuts
+5. perf: optimize SmartHighlighter for large files (150ms delay timer + visible area only for files >1MB)
 
 -----------------------------------------------------------------
 git add src/dialogs/MainWindow.cpp

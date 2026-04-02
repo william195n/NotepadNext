@@ -119,6 +119,7 @@ public:
     DEFINE_SETTING(DefaultEOLMode, defaultEOLMode, QString)
     DEFINE_SETTING(URLHighlighting, urlHighlighting, bool)
     DEFINE_SETTING(SmartHighlightCaseSensitive, smartHighlightCaseSensitive, bool)
+    DEFINE_SETTING(SmartHighlightFileSizeThresholdKB, smartHighlightFileSizeThresholdKB, int)
     DEFINE_SETTING(ShowLineNumbers, showLineNumbers, bool)
     DEFINE_SETTING(AutoCompletion, autoCompletion, bool)
 };

@@ -21,6 +21,7 @@
 #define SMARTHIGHLIGHTER_H
 
 #include "EditorDecorator.h"
+#include <QTimer>
 
 
 class SmartHighlighter : public EditorDecorator
@@ -32,7 +33,11 @@ public:
 
 private:
     void highlightCurrentView();
+    void scheduleHighlight();
+    bool shouldHighlightWholeFile() const;
+
     int indicator;
+    QTimer *highlightTimer;
 
 public slots:
     void notify(const Scintilla::NotificationData *pscn) override;

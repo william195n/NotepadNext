@@ -71,5 +71,6 @@ CREATE_SETTING(Editor, AdditionalWordChars, additionalWordChars, QString, QStrin
 CREATE_SETTING(Editor, DefaultEOLMode, defaultEOLMode, QString, QStringLiteral(""))
 CREATE_SETTING(Editor, URLHighlighting, urlHighlighting, bool, true)
 CREATE_SETTING(Editor, SmartHighlightCaseSensitive, smartHighlightCaseSensitive, bool, false)
+CREATE_SETTING(Editor, SmartHighlightFileSizeThresholdKB, smartHighlightFileSizeThresholdKB, int, 1024)
 CREATE_SETTING(Editor, ShowLineNumbers, showLineNumbers, bool, true)
 CREATE_SETTING(Editor, AutoCompletion, autoCompletion, bool, false)
