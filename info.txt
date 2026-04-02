@@ -8,9 +8,11 @@ add features:
 
 
 -----------------------------------------------------------------
-git add .github/workflows/
-git commit -m "chore: Update GitHub Actions to latest versions to resolve Node.js 20 deprecation warnings"
+git add src/dialogs/MainWindow.cpp
+git commit -m "feat: change save prompt to Yes/No/Cancel and add Y/N/C shortcuts"
 git push origin master
+
+git commit -m "update info.txt"
 
 ----init
 # 重命名现有的 origin 为 upstream

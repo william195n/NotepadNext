@@ -1109,13 +1109,25 @@ bool MainWindow::checkEditorsBeforeClose(const QVector<ScintillaNext *> &editors
 
             // Ask the user what to do
             QString message = tr("Save file <b>%1</b>?").arg(editor->getName());
-            auto reply = QMessageBox::question(this, tr("Save File"), message, QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel, QMessageBox::Save);
+
+            QMessageBox msgBox(this);
+            msgBox.setWindowTitle(tr("Save File"));
+            msgBox.setText(message);
+            msgBox.setIcon(QMessageBox::Question);
+            msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+            msgBox.setDefaultButton(QMessageBox::Yes);
+
+            if (auto btn = msgBox.button(QMessageBox::Yes)) btn->setShortcut(QKeySequence(Qt::Key_Y));
+            if (auto btn = msgBox.button(QMessageBox::No)) btn->setShortcut(QKeySequence(Qt::Key_N));
+            if (auto btn = msgBox.button(QMessageBox::Cancel)) btn->setShortcut(QKeySequence(Qt::Key_C));
+
+            int reply = msgBox.exec();
 
             if (reply == QMessageBox::Cancel) {
                 // Stop checking and let the caller know
                 return false;
             }
-            else if (reply == QMessageBox::Save) {
+            else if (reply == QMessageBox::Yes) {
                 bool didFileGetSaved = saveFile(editor);
 
                 // The user might have canceled the save file dialog so just stop now
@@ -1200,13 +1212,25 @@ void MainWindow::closeFile(ScintillaNext *editor)
         dockedEditor->switchToEditor(editor);
 
         QString message = tr("Save file <b>%1</b>?").arg(editor->getName());
-        auto reply = QMessageBox::question(this, tr("Save File"), message, QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel, QMessageBox::Save);
+
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle(tr("Save File"));
+        msgBox.setText(message);
+        msgBox.setIcon(QMessageBox::Question);
+        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Yes);
+
+        if (auto btn = msgBox.button(QMessageBox::Yes)) btn->setShortcut(QKeySequence(Qt::Key_Y));
+        if (auto btn = msgBox.button(QMessageBox::No)) btn->setShortcut(QKeySequence(Qt::Key_N));
+        if (auto btn = msgBox.button(QMessageBox::Cancel)) btn->setShortcut(QKeySequence(Qt::Key_C));
+
+        int reply = msgBox.exec();
 
         if (reply == QMessageBox::Cancel) {
             return;
         }
 
-        if (reply == QMessageBox::Save) {
+        if (reply == QMessageBox::Yes) {
             bool didFileGetSaved = saveFile(editor);
 
             // The user might have canceled the save file dialog so just stop now
