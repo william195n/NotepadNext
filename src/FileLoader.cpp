@@ -18,6 +18,7 @@
 
 
 #include "FileLoader.h"
+#include "ErrorHandler.h"
 #include <QFileInfo>
 #include <QDebug>
 #include <QTextStream>
@@ -33,13 +34,18 @@ FileLoader::FileMetadata* FileLoader::loadFile(QFile &file,
                                                 int chunkSize)
 {
     if (!file.exists()) {
-        qWarning("FileLoader: Cannot read \"%s\": doesn't exist", qUtf8Printable(file.fileName()));
+        ErrorHandler::logError("FileLoader",
+                              QString("Cannot read \"%1\"").arg(file.fileName()),
+                              "File doesn't exist",
+                              ErrorHandler::Severity::Warning);
         return nullptr;
     }
 
     if (!file.open(QIODevice::ReadOnly)) {
-        qWarning("FileLoader: QFile::open() failed when opening \"%s\" - error code %d: %s",
-                 qUtf8Printable(file.fileName()), file.error(), qUtf8Printable(file.errorString()));
+        ErrorHandler::logError("FileLoader",
+                              QString("Opening \"%1\"").arg(file.fileName()),
+                              QString("Error code %1: %2").arg(file.error()).arg(file.errorString()),
+                              ErrorHandler::Severity::Critical);
         return nullptr;
     }
 
@@ -57,8 +63,10 @@ FileLoader::FileMetadata* FileLoader::loadFile(QFile &file,
         chunk.resize(bytesRead);
 
         if (bytesRead == -1) {
-            qWarning("FileLoader: Error reading file \"%s\" - error code %d: %s",
-                     qUtf8Printable(file.fileName()), file.error(), qUtf8Printable(file.errorString()));
+            ErrorHandler::logError("FileLoader",
+                                  QString("Reading file \"%1\"").arg(file.fileName()),
+                                  QString("Error code %1: %2").arg(file.error()).arg(file.errorString()),
+                                  ErrorHandler::Severity::Critical);
             file.close();
             delete metadata;
             return nullptr;
@@ -92,7 +100,10 @@ FileLoader::FileMetadata* FileLoader::loadFile(QFile &file,
 
         // Call the chunk handler
         if (!chunkHandler(chunk)) {
-            qWarning("FileLoader: Chunk handler returned false, aborting load");
+            ErrorHandler::logError("FileLoader",
+                                  "Processing file chunk",
+                                  "Chunk handler returned false, aborting load",
+                                  ErrorHandler::Severity::Critical);
             file.close();
             delete metadata;
             return nullptr;
@@ -152,7 +163,10 @@ void FileLoader::removeBom(QByteArray &data, BomType bom)
 QByteArray FileLoader::convertUtf16ToUtf8(const QByteArray &data, BomType bom)
 {
     if (bom != BomType::Utf16LE && bom != BomType::Utf16BE) {
-        qWarning("FileLoader: Invalid BOM type for UTF-16 conversion");
+        ErrorHandler::logError("FileLoader",
+                              "UTF-16 to UTF-8 conversion",
+                              QString("Invalid BOM type: %1").arg(static_cast<int>(bom)),
+                              ErrorHandler::Severity::Critical);
         return QByteArray();
     }
 
@@ -163,7 +177,10 @@ QByteArray FileLoader::convertUtf16ToUtf8(const QByteArray &data, BomType bom)
     // UTF-16 characters are 2 bytes each (or 4 for surrogate pairs)
     // Make sure we have complete characters
     if (dataWithoutBom.size() % 2 != 0) {
-        qWarning("FileLoader: UTF-16 data has odd byte count, may be corrupted");
+        ErrorHandler::logError("FileLoader",
+                              "UTF-16 validation",
+                              QString("UTF-16 data has odd byte count (%1), may be corrupted").arg(dataWithoutBom.size()),
+                              ErrorHandler::Severity::Warning);
     }
 
     QString converted;
@@ -199,7 +216,10 @@ FileLoader::FileMetadata* FileLoader::loadUtf16File(QFile &file, BomType bomType
 
     if (!file.isOpen()) {
         if (!file.open(QIODevice::ReadOnly)) {
-            qWarning("FileLoader: Failed to open UTF-16 file");
+            ErrorHandler::logError("FileLoader",
+                                  QString("Opening UTF-16 file \"%1\"").arg(file.fileName()),
+                                  QString("Error code %1: %2").arg(file.error()).arg(file.errorString()),
+                                  ErrorHandler::Severity::Critical);
             return nullptr;
         }
     }
@@ -209,7 +229,10 @@ FileLoader::FileMetadata* FileLoader::loadUtf16File(QFile &file, BomType bomType
     file.close();
 
     if (allData.isEmpty()) {
-        qWarning("FileLoader: Empty UTF-16 file");
+        ErrorHandler::logError("FileLoader",
+                              QString("Reading UTF-16 file \"%1\"").arg(file.fileName()),
+                              "File is empty",
+                              ErrorHandler::Severity::Warning);
         return nullptr;
     }
 
@@ -223,7 +246,10 @@ FileLoader::FileMetadata* FileLoader::loadUtf16File(QFile &file, BomType bomType
     QByteArray utf8Data = convertUtf16ToUtf8(allData, bomType);
 
     if (utf8Data.isEmpty()) {
-        qWarning("FileLoader: UTF-16 to UTF-8 conversion failed");
+        ErrorHandler::logError("FileLoader",
+                              QString("Converting UTF-16 file \"%1\"").arg(file.fileName()),
+                              "UTF-16 to UTF-8 conversion failed",
+                              ErrorHandler::Severity::Critical);
         delete metadata;
         return nullptr;
     }
@@ -240,7 +266,10 @@ FileLoader::FileMetadata* FileLoader::loadUtf16File(QFile &file, BomType bomType
         QByteArray chunk = utf8Data.mid(offset, chunkLen);
 
         if (!chunkHandler(chunk)) {
-            qWarning("FileLoader: Chunk handler returned false during UTF-16 file processing");
+            ErrorHandler::logError("FileLoader",
+                                  "Processing UTF-16 file chunk",
+                                  "Chunk handler returned false during UTF-16 file processing",
+                                  ErrorHandler::Severity::Critical);
             delete metadata;
             return nullptr;
         }

@@ -14,6 +14,7 @@ qt_add_executable(NotepadNext
 
 	EditorManager.h
 	EditorPrintPreviewRenderer.h
+	ErrorHandler.h
 	FileDialogHelpers.h
 	FileLoader.h
 	Finder.h
@@ -63,6 +64,7 @@ qt_add_executable(NotepadNext
 
 	EditorManager.cpp
 	EditorPrintPreviewRenderer.cpp
+	ErrorHandler.cpp
 	FileDialogHelpers.cpp
 	FileLoader.cpp
 	Finder.cpp

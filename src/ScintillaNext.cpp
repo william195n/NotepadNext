@@ -18,6 +18,7 @@
 
 
 #include "ScintillaNext.h"
+#include "ErrorHandler.h"
 #include "FileLoader.h"
 #include "Finder.h"
 #include "ScintillaCommenter.h"
@@ -73,20 +74,29 @@ static QFileDevice::FileError writeToDisk(const QByteArray &data, const QString 
 
     QFile file(path);
     if (!file.open(QIODevice::WriteOnly)) {
-        qWarning("writeToDisk() failed to open file %s: %s", qPrintable(path), qPrintable(file.errorString()));
+        ErrorHandler::logError("ScintillaNext",
+                              QString("Opening file for writing \"%1\"").arg(path),
+                              QString("Error code %1: %2").arg(file.error()).arg(file.errorString()),
+                              ErrorHandler::Severity::Critical);
         return file.error();
     }
 
     // Write BOM
     const QByteArray bomBytes = bomData(bom);
     if (!bomBytes.isEmpty() && file.write(bomBytes) == -1) {
-        qWarning("writeToDisk() failed writing BOM: %s", qPrintable(file.errorString()));
+        ErrorHandler::logError("ScintillaNext",
+                              QString("Writing BOM to \"%1\"").arg(path),
+                              QString("Error code %1: %2").arg(file.error()).arg(file.errorString()),
+                              ErrorHandler::Severity::Critical);
         return file.error();
     }
 
     // Write actual data
     if (file.write(data) == -1) {
-        qWarning("writeToDisk() failed writing data: %s", qPrintable(file.errorString()));
+        ErrorHandler::logError("ScintillaNext",
+                              QString("Writing data to \"%1\"").arg(path),
+                              QString("Error code %1: %2").arg(file.error()).arg(file.errorString()),
+                              ErrorHandler::Severity::Critical);
         return file.error();
     }
 
@@ -639,7 +649,10 @@ bool ScintillaNext::readFromDisk(QFile &file)
 
     // Handle load failure
     if (!metadata) {
-        qWarning("ScintillaNext: Failed to load file");
+        ErrorHandler::logError("ScintillaNext",
+                              "Loading file",
+                              "FileLoader returned null (check previous errors for details)",
+                              ErrorHandler::Severity::Critical);
         return false;
     }
 
@@ -668,7 +681,10 @@ bool ScintillaNext::readFromDisk(QFile &file)
 
     // Check for errors
     if (status() != SC_STATUS_OK) {
-        qWarning("Scintilla error occurred during file load: %ld", status());
+        ErrorHandler::logError("ScintillaNext",
+                              "Loading file",
+                              QString("Scintilla error occurred, status code: %1").arg(status()),
+                              ErrorHandler::Severity::Critical);
         delete metadata;
         return false;
     }
