@@ -52,9 +52,6 @@ PreferencesDialog::PreferencesDialog(ApplicationSettings *settings, QWidget *par
             ui->checkBoxUnsavedFiles->setChecked(false);
             ui->checkBoxRestoreTempFiles->setChecked(false);
         }
-        else {
-            QMessageBox::warning(this, tr("Warning"), tr("This feature is experimental and it should not be considered safe for critically important work. It may lead to possible data loss. Use at your own risk."));
-        }
     });
 
     MapSettingToCheckBox(ui->checkBoxUnsavedFiles, &ApplicationSettings::restoreUnsavedFiles, &ApplicationSettings::setRestoreUnsavedFiles, &ApplicationSettings::restoreUnsavedFilesChanged);

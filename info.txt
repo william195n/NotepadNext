@@ -1,3 +1,16 @@
+fork:	https://github.com/dail8859/NotepadNext
+my:		https://github.com/william195n/NotepadNext
+
+add features:
+1. Smart Highlighting Case-insensitive;
+2. Add option to toggle auto-completion, default to disabled
+3. Enable session restoration and snapshots by default
+
+
+
+git add .
+git commit -m "Enable session restoration and snapshots by default"
+git push origin master
 
 git clone https://github.com/dail8859/NotepadNext.git C:\git\NotepadNext
 
