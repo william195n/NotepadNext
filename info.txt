@@ -7,69 +7,12 @@ add features:
 3. Enable session restoration and snapshots by default
 
 
-
-git add .
-git commit -m "Enable session restoration and snapshots by default"
+-----------------------------------------------------------------
+git add .github/workflows/
+git commit -m "chore: Update GitHub Actions to latest versions to resolve Node.js 20 deprecation warnings"
 git push origin master
 
-git clone https://github.com/dail8859/NotepadNext.git C:\git\NotepadNext
-
-https://github.com/william195n/NotepadNext
-
-这是一个轻量级的文本编辑器，叫 NotepadNext. 我安装了这个软件在我的机器上。
-但我对它的一些功能不满意，所以clone了源码下来，想你帮我修改。
-
-
-选中一个词并自动高亮文档中所有相同的词（通常被称为 Smart Highlighting 或 Highlight Occurrences）
-netepadnext 有这个功能，但是是大小写敏感的，比如我选中  ABc，那 其他的 ABc 会高亮，但是 abc 不会。
-我不知道netepadnext有没有选项可以设置为大小写不敏感，还是需要改code。
-
-告诉我怎么编译？我需要安装 Qt Creator 或 CMake ？
-
-
-帮我确认是否有现成的 GitHub Actions 编译产物
-
-是的，我确认 NotepadNext 的 GitHub 仓库中配置了自动编译脚本 (GitHub Actions)。
-
-在项目的 .github/workflows/build.yml 文件中，定义了在每次代码推送（Push）或提交拉取请求（Pull Request）时，都会自动在 Windows、Linux 和 macOS 上进行编译，并上传以下产物：
-
-NotepadNext-Windows-Qt6.5-Zip: Windows 免安装压缩包。
-NotepadNext-Windows-Qt6.5-Installer: Windows 安装程序 (.exe)。
-Linux AppImage: Linux 可执行镜像。
-macOS dmg: macOS 安装镜像。
-如何找到这些编译好的文件？
-访问项目的主页：https://github.com/dail8859/NotepadNext
-点击上方的 Actions 选项卡。
-在左侧选择 Build Notepad Next 任务。
-点击最近的一个成功的任务记录（通常带绿色对勾）。
-滚动到页面底部的 Artifacts 区域，你就可以直接下载编译好的压缩包或安装程序。
-⚠️ 重要提示
-这些自动生成的产物是针对官方源码的。 由于我们刚才在本地修改了代码，官方的 GitHub Actions 不会自动包含我们的修改。
-
-如果你想获得一个**包含我们刚才修改的功能（不区分大小写高亮）**的可执行文件，你有两个选择：
-
-本地编译：按照我之前提供的步骤（安装 VS2022 和 Qt）在你的电脑上编译。
-利用 GitHub 自动编译：
-在 GitHub 上 Fork 这个仓库到你自己的账号下。
-把你本地修改后的代码 Push 到你的 Fork 仓库中。
-你自己的仓库里的 GitHub Actions 会自动开始编译，完成后你就能在你自己的 "Actions" 页面下载到包含新功能的安装包了。
-你想让我帮你把这些修改提交（Commit）并推送到你的 GitHub 仓库吗？
-
-
-好帮我把这些修改提交（Commit）并推送到我的 GitHub 仓库
-
-https://github.com/dail8859/NotepadNext
-我的仓库地址： https://github.com/william195n/NotepadNext
-
-# 切换到代码所在目录
-cd C:\UC\GitHub\NotepadNext
-
-# 推送到你自己的 GitHub 仓库
-git push my-fork master
-
-git branch --set-upstream-to=my-fork/master master
-
-
+----init
 # 重命名现有的 origin 为 upstream
 git remote rename origin upstream
 
@@ -80,7 +23,6 @@ git remote rename my-fork origin
 git branch --set-upstream-to=origin/master master
 
 这样以后你只需输入 git push 就会推送到自己的仓库，而输入 git pull upstream master 就可以同步原作者的更新。
-git remote -v 
 
 $ git remote -v
 origin		https://github.com/william195n/NotepadNext.git (fetch)
@@ -88,17 +30,33 @@ origin		https://github.com/william195n/NotepadNext.git (push)
 upstream	https://github.com/dail8859/NotepadNext.git (fetch)
 upstream	https://github.com/dail8859/NotepadNext.git (push)
 
+-----------------------------------------------------------------
+这是一个轻量级的文本编辑器，叫 NotepadNext. 我安装了这个软件在我的机器上。
+但我对它的一些功能不满意，所以clone了源码下来，想你帮我修改。
 
+-------------------------------
+选中一个词并自动高亮文档中所有相同的词（通常被称为 Smart Highlighting 或 Highlight Occurrences）
+netepadnext 有这个功能，但是是大小写敏感的，比如我选中  ABc，那 其他的 ABc 会高亮，但是 abc 不会。
+我不知道netepadnext有没有选项可以设置为大小写不敏感，还是需要改code。
+
+在项目的 .github/workflows/build.yml 文件中，定义了在每次代码推送（Push）或提交拉取请求（Pull Request）时，都会自动在 Windows、Linux 和 macOS 上进行编译，并上传以下产物：
+
+利用 GitHub 自动编译：
+在 GitHub 上 Fork 这个仓库到你自己的账号下。
+把你本地修改后的代码 Push 到你的 Fork 仓库中。
+你自己的仓库里的 GitHub Actions 会自动开始编译，完成后你就能在你自己的 "Actions" 页面下载到包含新功能的安装包了。
+你想让我帮你把这些修改提交（Commit）并推送到你的 GitHub 仓库吗？
+
+好帮我把这些修改提交（Commit）并推送到我的 GitHub 仓库:	我的仓库地址： https://github.com/william195n/NotepadNext
+
+# 推送到你自己的 GitHub 仓库
+git push my-fork master
 
 一旦推送成功：
 访问你的 GitHub 页面：https://github.com/william195n/NotepadNext/actions。
 你应该能看到一个正在运行的任务。
 等它变绿（通常需要 10-15 分钟），你就可以在 Artifacts 区域下载到编译好的 .exe 或 Zip 文件了。
-还需要我帮你做其他的代码修改吗？
 
-
-
+--------others
 https://cudatext.github.io/download.html
-
-
 轻量级的迷你 IDE：Geany
