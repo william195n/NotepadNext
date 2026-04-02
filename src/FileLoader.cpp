@@ -33,14 +33,8 @@ FileLoader::FileMetadata* FileLoader::loadFile(QFile &file,
                                                 std::function<bool(const QByteArray&)> chunkHandler,
                                                 int chunkSize)
 {
-    if (!file.exists()) {
-        ErrorHandler::logError("FileLoader",
-                              QString("Cannot read \"%1\"").arg(file.fileName()),
-                              "File doesn't exist",
-                              ErrorHandler::Severity::Warning);
-        return nullptr;
-    }
-
+    // Open file directly - no need to check existence first (TOCTOU anti-pattern)
+    // QFile::open() will fail appropriately if file doesn't exist
     if (!file.open(QIODevice::ReadOnly)) {
         ErrorHandler::logError("FileLoader",
                               QString("Opening \"%1\"").arg(file.fileName()),
