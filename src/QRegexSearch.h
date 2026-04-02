@@ -89,13 +89,14 @@ class QRegexSearch : public RegexSearchBase
 {
 public:
     QRegexSearch();
+    ~QRegexSearch() override = default;
 
     Sci::Position FindText(Document *doc, Sci::Position minPos, Sci::Position maxPos, const char *s, bool caseSensitive, bool word, bool wordStart, Scintilla::FindOption flags, Sci::Position *length) override;
     const char *SubstituteByPosition(Document *doc, const char *text, Sci::Position *length) override;
 
 private:
     QRegularExpressionMatch match;
-    QByteArray *substituted = Q_NULLPTR;
+    std::unique_ptr<QByteArray> substituted;
 };
 
 #endif // QREGEXSEARCH_H

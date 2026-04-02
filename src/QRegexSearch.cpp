@@ -116,12 +116,8 @@ const char *QRegexSearch::SubstituteByPosition(Document *doc, const char *text, 
     QString newString = match.captured();
     newString.replace(match.regularExpression(), QByteArray(text, *length));
 
-    // TODO: figure out why this has to be new'd and can't be an instantiated class member
-    if (substituted) {
-        delete substituted;
-    }
-
-    substituted = new QByteArray(newString.toUtf8());
+    // Use smart pointer for automatic memory management
+    substituted = std::make_unique<QByteArray>(newString.toUtf8());
     *length = substituted->length();
     return substituted->data();
 }

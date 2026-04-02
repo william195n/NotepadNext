@@ -38,6 +38,16 @@ MacroManager::MacroManager(QObject *parent) :
 MacroManager::~MacroManager()
 {
     saveSettings();
+
+    // Clean up current macro if not saved
+    if (!isCurrentMacroSaved && currentMacro) {
+        delete currentMacro;
+        currentMacro = Q_NULLPTR;
+    }
+
+    // Clean up all macros in the vector
+    qDeleteAll(macros);
+    macros.clear();
 }
 
 void MacroManager::startRecording(ScintillaNext *editor)
@@ -66,8 +76,8 @@ void MacroManager::stopRecording()
         delete m;
     }
     else {
-        if (isCurrentMacroSaved == false) {
-            // The previous current macro wasn't saved and we are getting ready to point to something else, delete it
+        if (isCurrentMacroSaved == false && currentMacro) {
+            // The previous current macro wasn't saved, delete it before replacing
             delete currentMacro;
         }
 
