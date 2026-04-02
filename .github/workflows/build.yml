@@ -9,7 +9,7 @@ on:
   pull_request:
 
 env:
-  QT_RELEASE_VER: 6.5
+  QT_RELEASE_VER: 6.8
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
