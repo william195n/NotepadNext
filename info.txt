@@ -12,6 +12,7 @@ add features:
 8. fix: improve memory management (use std::unique_ptr in QRegexSearch, fix MacroManager memory leaks)
 9. refactor: extract FileLoader class for better separation of concerns (BOM detection, encoding, chunked reading)
 10. feat: add UTF-16 support with automatic conversion to UTF-8 (both LE and BE)
+11. feat: add unified ErrorHandler for consistent error reporting (structured logging, user-friendly messages)
 
 -----------------------------------------------------------------
 git add src/dialogs/MainWindow.cpp
