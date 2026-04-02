@@ -18,6 +18,7 @@
 
 
 #include "SmartHighlighter.h"
+#include "NotepadNextApplication.h"
 
 using namespace Scintilla;
 
@@ -85,7 +86,11 @@ void SmartHighlighter::highlightCurrentView()
     // TODO: skip hidden or folded lines?
 
     Sci_TextToFind ttf {{0, (Sci_PositionCR)editor->length()}, selText.constData(), {-1, -1}};
-    const int flags = SCFIND_MATCHCASE | SCFIND_WHOLEWORD;
+    NotepadNextApplication *app = qobject_cast<NotepadNextApplication *>(qApp);
+    int flags = SCFIND_WHOLEWORD;
+    if (app->getSettings()->smartHighlightCaseSensitive()) {
+        flags |= SCFIND_MATCHCASE;
+    }
 
     while (editor->send(SCI_FINDTEXT, flags, (sptr_t)&ttf) != -1) {
         editor->indicatorFillRange(ttf.chrgText.cpMin, ttf.chrgText.cpMax - ttf.chrgText.cpMin);

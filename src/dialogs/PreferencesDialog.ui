@@ -202,6 +202,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QCheckBox" name="checkBoxSmartHighlightCaseSensitive">
+         <property name="text">
+          <string>Smart Highlighting: Case Sensitive</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QCheckBox" name="checkBoxShowLineNumbers">
          <property name="text">
           <string>Show Line Numbers</string>

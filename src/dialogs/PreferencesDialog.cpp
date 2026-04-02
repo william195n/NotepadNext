@@ -100,6 +100,7 @@ PreferencesDialog::PreferencesDialog(ApplicationSettings *settings, QWidget *par
     });
 
     MapSettingToCheckBox(ui->checkBoxHighlightURLs, &ApplicationSettings::urlHighlighting, &ApplicationSettings::setURLHighlighting, &ApplicationSettings::urlHighlightingChanged);
+    MapSettingToCheckBox(ui->checkBoxSmartHighlightCaseSensitive, &ApplicationSettings::smartHighlightCaseSensitive, &ApplicationSettings::setSmartHighlightCaseSensitive, &ApplicationSettings::smartHighlightCaseSensitiveChanged);
     MapSettingToCheckBox(ui->checkBoxShowLineNumbers, &ApplicationSettings::showLineNumbers, &ApplicationSettings::setShowLineNumbers, &ApplicationSettings::showLineNumbersChanged);
 
 
