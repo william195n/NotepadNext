@@ -23,6 +23,7 @@
 #include "SessionManager.h"
 #include "EditorManager.h"
 #include "NotepadNextApplication.h"
+#include "ErrorHandler.h"
 
 #include <QDir>
 #include <QStandardPaths>
@@ -48,7 +49,21 @@ static QVariantList QListToQVariantList(const QList<int> intList)
 static QList<int> QVariantListToQList(const QVariantList &variantList) {
     QList<int> intList;
     for (const QVariant &variant : variantList) {
-        intList.append(variant.toInt());
+        // Verify the variant can be converted to int
+        bool ok = false;
+        int value = variant.toInt(&ok);
+
+        if (ok) {
+            intList.append(value);
+        } else {
+            // Log warning but continue processing remaining items
+            ErrorHandler::logError("SessionManager",
+                                  "Converting QVariant to int",
+                                  QString("Failed to convert variant (type: %1, value: %2) to int")
+                                      .arg(variant.typeName())
+                                      .arg(variant.toString()),
+                                  ErrorHandler::Severity::Warning);
+        }
     }
     return intList;
 }
@@ -398,9 +413,29 @@ void SessionManager::loadEditorViewDetails(ScintillaNext *editor, QSettings &set
 
     if (settings.contains("BookMarks"))
     {
-        QList<int> bookMarkedLines = QVariantListToQList(settings.value("BookMarks").toList()); // just using .value<QList<int>>() does not work...possibly a Qt bug?
+        QVariant bookMarksVariant = settings.value("BookMarks");
 
-        BookMarkDecorator *decorator = editor->findChild<BookMarkDecorator*>(QString(), Qt::FindDirectChildrenOnly);
-        decorator->setBookMarkedLines(bookMarkedLines);
+        // Type check: ensure it's a list type before conversion
+        if (bookMarksVariant.canConvert<QVariantList>()) {
+            QList<int> bookMarkedLines = QVariantListToQList(bookMarksVariant.toList());
+
+            // Only restore bookmarks if we successfully converted at least one
+            if (!bookMarkedLines.isEmpty()) {
+                BookMarkDecorator *decorator = editor->findChild<BookMarkDecorator*>(QString(), Qt::FindDirectChildrenOnly);
+                if (decorator) {
+                    decorator->setBookMarkedLines(bookMarkedLines);
+                } else {
+                    ErrorHandler::logError("SessionManager",
+                                          "Restoring bookmarks",
+                                          "BookMarkDecorator not found for editor",
+                                          ErrorHandler::Severity::Warning);
+                }
+            }
+        } else {
+            ErrorHandler::logError("SessionManager",
+                                  "Loading session bookmarks",
+                                  QString("BookMarks value has unexpected type: %1").arg(bookMarksVariant.typeName()),
+                                  ErrorHandler::Severity::Warning);
+        }
     }
 }
