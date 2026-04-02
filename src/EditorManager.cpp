@@ -128,6 +128,15 @@ EditorManager::EditorManager(ApplicationSettings *settings, QObject *parent)
             }
         }
     });
+
+    connect(settings, &ApplicationSettings::autoCompletionChanged, this, [=](bool b){
+        for (auto &editor : getEditors()) {
+            AutoCompletion *decorator = editor->findChild<AutoCompletion *>(QString(), Qt::FindDirectChildrenOnly);
+            if (decorator) {
+                decorator->setEnabled(b);
+            }
+        }
+    });
 }
 
 ScintillaNext *EditorManager::createEditor(const QString &name)
@@ -323,7 +332,7 @@ void EditorManager::setupEditor(ScintillaNext *editor)
     ai->setEnabled(true);
 
     AutoCompletion *ac = new AutoCompletion(editor);
-    ac->setEnabled(true);
+    ac->setEnabled(settings->autoCompletion());
 
     URLFinder *uf = new URLFinder(editor);
     uf->setEnabled(settings->urlHighlighting());

@@ -120,4 +120,5 @@ public:
     DEFINE_SETTING(URLHighlighting, urlHighlighting, bool)
     DEFINE_SETTING(SmartHighlightCaseSensitive, smartHighlightCaseSensitive, bool)
     DEFINE_SETTING(ShowLineNumbers, showLineNumbers, bool)
+    DEFINE_SETTING(AutoCompletion, autoCompletion, bool)
 };
