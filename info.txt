@@ -15,6 +15,7 @@ add features:
 11. feat: add unified ErrorHandler for consistent error reporting (structured logging, user-friendly messages)
 12. fix: add type validation for session bookmark restoration (prevents crashes from corrupted session data)
 13. feat: add comprehensive debug logging for translation system (helps diagnose Qt locale bug)
+14. feat: make auto-completion trigger threshold configurable (1-5 characters, default 3)
 
 -----------------------------------------------------------------
 git add src/dialogs/MainWindow.cpp
