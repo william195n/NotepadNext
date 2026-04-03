@@ -16,6 +16,7 @@ add features:
 12. fix: add type validation for session bookmark restoration (prevents crashes from corrupted session data)
 13. feat: add comprehensive debug logging for translation system (helps diagnose Qt locale bug)
 14. feat: make auto-completion trigger threshold configurable (1-5 characters, default 3)
+15. feat: add UPPERCASE and lowercase to right-click context menu (quick text case conversion)
 
 -----------------------------------------------------------------
 git add src/dialogs/MainWindow.cpp
