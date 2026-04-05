@@ -736,7 +736,7 @@
     </message>
     <message>
         <location filename="../src/dialogs/MainWindow.ui" line="69"/>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1402"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1452"/>
         <source>Export As</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1870,171 +1870,181 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1111"/>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1202"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1090"/>
+        <source>The file &lt;b&gt;%1&lt;/b&gt; is very large (%.2f MB).&lt;br&gt;&lt;br&gt;Opening large files may consume significant memory and cause the application to slow down or become unresponsive.&lt;br&gt;&lt;br&gt;Do you want to continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1097"/>
+        <source>Large File Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1137"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1240"/>
         <source>Save file &lt;b&gt;%1&lt;/b&gt;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1112"/>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1203"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1140"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1243"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1153"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1191"/>
         <source>Open Folder as Workspace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1176"/>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1848"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1214"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1898"/>
         <source>Reload File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1176"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1214"/>
         <source>Are you sure you want to reload &lt;b&gt;%1&lt;/b&gt;? Any unsaved changes will be lost.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1367"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1417"/>
         <source>Save a Copy As</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1443"/>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1460"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1493"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1510"/>
         <source>Rename</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1460"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1510"/>
         <source>Name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1480"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1530"/>
         <source>Delete File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1480"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1530"/>
         <source>Are you sure you want to move &lt;b&gt;%1&lt;/b&gt; to the trash?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1490"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1540"/>
         <source>Error Deleting File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1490"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1540"/>
         <source>Something went wrong deleting &lt;b&gt;%1&lt;/b&gt;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1587"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1637"/>
         <source>Administrator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1848"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1898"/>
         <source>&lt;b&gt;%1&lt;/b&gt; has been modified by another program. Do you want to reload it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1874"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1924"/>
         <source>Read error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1875"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1925"/>
         <source>Write error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1876"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1926"/>
         <source>Fatal error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1877"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1927"/>
         <source>Resource error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1878"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1928"/>
         <source>Open error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1879"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1929"/>
         <source>Abort error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1880"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1930"/>
         <source>Timeout error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1881"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1931"/>
         <source>Unspecified error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1882"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1932"/>
         <source>Remove error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1883"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1933"/>
         <source>Rename error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1884"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1934"/>
         <source>Position error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1885"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1935"/>
         <source>Resize error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1886"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1936"/>
         <source>Permissions error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1887"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1937"/>
         <source>Copy error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1888"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1938"/>
         <source>Unknown error (%1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1891"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1941"/>
         <source>Error Saving File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1892"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1942"/>
         <source>An error occurred when saving &lt;b&gt;%1&lt;/b&gt;&lt;br&gt;&lt;br&gt;Error: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="1898"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="1948"/>
         <source>Zoom: %1%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/MainWindow.cpp" line="2065"/>
+        <location filename="../src/dialogs/MainWindow.cpp" line="2118"/>
         <source>No updates are available at this time.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2128,73 +2138,186 @@
     </message>
     <message>
         <location filename="../src/dialogs/PreferencesDialog.ui" line="207"/>
-        <source>Show Line Numbers</source>
+        <source>Smart Highlighting: Case Sensitive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/dialogs/PreferencesDialog.ui" line="214"/>
-        <location filename="../src/dialogs/PreferencesDialog.cpp" line="122"/>
+        <source>Show Line Numbers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/dialogs/PreferencesDialog.ui" line="221"/>
+        <source>Enable auto-completion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/dialogs/PreferencesDialog.ui" line="228"/>
+        <location filename="../src/dialogs/PreferencesDialog.cpp" line="121"/>
         <source>Default Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/PreferencesDialog.ui" line="220"/>
+        <location filename="../src/dialogs/PreferencesDialog.ui" line="234"/>
         <source>Follow Current Document</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/PreferencesDialog.ui" line="227"/>
+        <location filename="../src/dialogs/PreferencesDialog.ui" line="241"/>
         <source>Last Used Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/PreferencesDialog.ui" line="246"/>
+        <location filename="../src/dialogs/PreferencesDialog.ui" line="260"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/PreferencesDialog.ui" line="277"/>
+        <location filename="../src/dialogs/PreferencesDialog.ui" line="291"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/PreferencesDialog.ui" line="289"/>
+        <location filename="../src/dialogs/PreferencesDialog.ui" line="303"/>
         <source>An application restart is required to apply certain settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/PreferencesDialog.cpp" line="56"/>
-        <source>Warning</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/dialogs/PreferencesDialog.cpp" line="56"/>
-        <source>This feature is experimental and it should not be considered safe for critically important work. It may lead to possible data loss. Use at your own risk.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/dialogs/PreferencesDialog.cpp" line="85"/>
+        <location filename="../src/dialogs/PreferencesDialog.cpp" line="82"/>
         <source>System Default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/PreferencesDialog.cpp" line="86"/>
+        <location filename="../src/dialogs/PreferencesDialog.cpp" line="83"/>
         <source>Windows (CR LF)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/PreferencesDialog.cpp" line="87"/>
+        <location filename="../src/dialogs/PreferencesDialog.cpp" line="84"/>
         <source>Linux (LF)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/PreferencesDialog.cpp" line="88"/>
+        <location filename="../src/dialogs/PreferencesDialog.cpp" line="85"/>
         <source>Macintosh (CR)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dialogs/PreferencesDialog.cpp" line="185"/>
+        <location filename="../src/dialogs/PreferencesDialog.cpp" line="184"/>
         <source>&lt;System Default&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <location filename="../src/ErrorHandler.cpp" line="52"/>
+        <source>Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorHandler.cpp" line="56"/>
+        <source>Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorHandler.cpp" line="61"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorHandler.cpp" line="66"/>
+        <source>Failed %1 &lt;b&gt;%2&lt;/b&gt;&lt;br&gt;&lt;br&gt;Error: %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorHandler.cpp" line="71"/>
+        <source>Please check that you have the necessary permissions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorHandler.cpp" line="76"/>
+        <source>Please check that the file is not open in another program.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorHandler.cpp" line="93"/>
+        <source>No error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorHandler.cpp" line="95"/>
+        <source>Read error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorHandler.cpp" line="97"/>
+        <source>Write error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorHandler.cpp" line="99"/>
+        <source>Fatal error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorHandler.cpp" line="101"/>
+        <source>Resource error (file may be locked)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorHandler.cpp" line="103"/>
+        <source>Open error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorHandler.cpp" line="105"/>
+        <source>Abort error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorHandler.cpp" line="107"/>
+        <source>Timeout error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorHandler.cpp" line="109"/>
+        <source>Unspecified error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorHandler.cpp" line="111"/>
+        <source>Remove error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorHandler.cpp" line="113"/>
+        <source>Rename error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorHandler.cpp" line="115"/>
+        <source>Position error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorHandler.cpp" line="117"/>
+        <source>Resize error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorHandler.cpp" line="119"/>
+        <source>Permissions error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorHandler.cpp" line="121"/>
+        <source>Copy error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ErrorHandler.cpp" line="123"/>
+        <source>Unknown error (%1)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
