@@ -116,7 +116,7 @@ EditorManager::EditorManager(ApplicationSettings *settings, QObject *parent)
 
     connect(settings, &ApplicationSettings::urlHighlightingChanged, this, [=](bool b){
         for (auto &editor : getEditors()) {
-            auto decorator = editor->property("urlFinderDecorator").value<URLFinder*>();
+            auto decorator = editor->QObject::property("urlFinderDecorator").value<URLFinder*>();
             if (decorator) {
                 decorator->setEnabled(b);
             }
@@ -125,7 +125,7 @@ EditorManager::EditorManager(ApplicationSettings *settings, QObject *parent)
 
     connect(settings, &ApplicationSettings::showLineNumbersChanged, this, [=](bool b){
         for (auto &editor : getEditors()) {
-            auto decorator = editor->property("lineNumbersDecorator").value<LineNumbers*>();
+            auto decorator = editor->QObject::property("lineNumbersDecorator").value<LineNumbers*>();
             if (decorator) {
                 decorator->setEnabled(b);
             }
@@ -134,7 +134,7 @@ EditorManager::EditorManager(ApplicationSettings *settings, QObject *parent)
 
     connect(settings, &ApplicationSettings::autoCompletionChanged, this, [=](bool b){
         for (auto &editor : getEditors()) {
-            auto decorator = editor->property("autoCompletionDecorator").value<AutoCompletion*>();
+            auto decorator = editor->QObject::property("autoCompletionDecorator").value<AutoCompletion*>();
             if (decorator) {
                 decorator->setEnabled(b);
             }
@@ -336,7 +336,7 @@ void EditorManager::setupEditor(ScintillaNext *editor)
 
     LineNumbers *l = new LineNumbers(editor);
     l->setEnabled(settings->showLineNumbers());
-    editor->setProperty("lineNumbersDecorator", QVariant::fromValue(l));
+    editor->QObject::setProperty("lineNumbersDecorator", QVariant::fromValue(l));
 
     SurroundSelection *ss = new SurroundSelection(editor);
     ss->setEnabled(true);
@@ -349,11 +349,11 @@ void EditorManager::setupEditor(ScintillaNext *editor)
 
     AutoCompletion *ac = new AutoCompletion(editor);
     ac->setEnabled(settings->autoCompletion());
-    editor->setProperty("autoCompletionDecorator", QVariant::fromValue(ac));
+    editor->QObject::setProperty("autoCompletionDecorator", QVariant::fromValue(ac));
 
     URLFinder *uf = new URLFinder(editor);
     uf->setEnabled(settings->urlHighlighting());
-    editor->setProperty("urlFinderDecorator", QVariant::fromValue(uf));
+    editor->QObject::setProperty("urlFinderDecorator", QVariant::fromValue(uf));
 
     BookMarkDecorator *bm = new BookMarkDecorator(editor);
     bm->setEnabled(true);
