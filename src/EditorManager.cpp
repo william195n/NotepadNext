@@ -96,9 +96,12 @@ EditorManager::EditorManager(ApplicationSettings *settings, QObject *parent)
     });
 
     connect(settings, &ApplicationSettings::fontNameChanged, this, [=](QString fontName){
+        const QByteArray fontNameUtf8 = fontName.toUtf8();
+        const char* fontData = fontNameUtf8.constData();
+
         for (auto &editor : getEditors()) {
             for (int i = 0; i <= STYLE_MAX; ++i) {
-                editor->styleSetFont(i, fontName.toUtf8().data());
+                editor->styleSetFont(i, fontData);
             }
         }
     });
@@ -113,7 +116,7 @@ EditorManager::EditorManager(ApplicationSettings *settings, QObject *parent)
 
     connect(settings, &ApplicationSettings::urlHighlightingChanged, this, [=](bool b){
         for (auto &editor : getEditors()) {
-            URLFinder *decorator = editor->findChild<URLFinder *>(QString(), Qt::FindDirectChildrenOnly);
+            auto decorator = editor->property("urlFinderDecorator").value<URLFinder*>();
             if (decorator) {
                 decorator->setEnabled(b);
             }
@@ -122,7 +125,7 @@ EditorManager::EditorManager(ApplicationSettings *settings, QObject *parent)
 
     connect(settings, &ApplicationSettings::showLineNumbersChanged, this, [=](bool b){
         for (auto &editor : getEditors()) {
-            LineNumbers *decorator = editor->findChild<LineNumbers *>(QString(), Qt::FindDirectChildrenOnly);
+            auto decorator = editor->property("lineNumbersDecorator").value<LineNumbers*>();
             if (decorator) {
                 decorator->setEnabled(b);
             }
@@ -131,7 +134,7 @@ EditorManager::EditorManager(ApplicationSettings *settings, QObject *parent)
 
     connect(settings, &ApplicationSettings::autoCompletionChanged, this, [=](bool b){
         for (auto &editor : getEditors()) {
-            AutoCompletion *decorator = editor->findChild<AutoCompletion *>(QString(), Qt::FindDirectChildrenOnly);
+            auto decorator = editor->property("autoCompletionDecorator").value<AutoCompletion*>();
             if (decorator) {
                 decorator->setEnabled(b);
             }
@@ -163,13 +166,14 @@ ScintillaNext *EditorManager::getEditorByFilePath(const QString &filePath)
 {
     QFileInfo newInfo(filePath);
     newInfo.makeAbsolute();
+    QString canonicalPath = newInfo.canonicalFilePath();
 
     purgeOldEditorPointers();
 
-    for (ScintillaNext *editor : qAsConst(editors)) {
-        if (editor->isFile() && editor->getFileInfo() == newInfo) {
-            return editor;
-        }
+    // Fast O(1) lookup using hash map
+    auto it = editorsByPath.find(canonicalPath);
+    if (it != editorsByPath.end() && !it->isNull()) {
+        return it.value();
     }
 
     return Q_NULLPTR;
@@ -178,6 +182,17 @@ ScintillaNext *EditorManager::getEditorByFilePath(const QString &filePath)
 void EditorManager::manageEditor(ScintillaNext *editor)
 {
     editors.append(QPointer<ScintillaNext>(editor));
+
+    // Add to hash map for fast lookup
+    if (editor->isFile()) {
+        QString canonicalPath = editor->getFileInfo().canonicalFilePath();
+        editorsByPath.insert(canonicalPath, QPointer<ScintillaNext>(editor));
+    }
+
+    // Connect to update hash when editor is renamed or saved
+    connect(editor, &ScintillaNext::renamed, this, [=]() {
+        updateEditorPath(editor);
+    });
 
     setupEditor(editor);
 
@@ -321,6 +336,7 @@ void EditorManager::setupEditor(ScintillaNext *editor)
 
     LineNumbers *l = new LineNumbers(editor);
     l->setEnabled(settings->showLineNumbers());
+    editor->setProperty("lineNumbersDecorator", QVariant::fromValue(l));
 
     SurroundSelection *ss = new SurroundSelection(editor);
     ss->setEnabled(true);
@@ -333,9 +349,11 @@ void EditorManager::setupEditor(ScintillaNext *editor)
 
     AutoCompletion *ac = new AutoCompletion(editor);
     ac->setEnabled(settings->autoCompletion());
+    editor->setProperty("autoCompletionDecorator", QVariant::fromValue(ac));
 
     URLFinder *uf = new URLFinder(editor);
     uf->setEnabled(settings->urlHighlighting());
+    editor->setProperty("urlFinderDecorator", QVariant::fromValue(uf));
 
     BookMarkDecorator *bm = new BookMarkDecorator(editor);
     bm->setEnabled(true);
@@ -407,5 +425,23 @@ int EditorManager::detectEOLMode(ScintillaNext *editor) const
     }
     else {
         return -1;
+    }
+}
+
+void EditorManager::updateEditorPath(ScintillaNext *editor)
+{
+    // Remove old entries pointing to this editor
+    QMutableHashIterator<QString, QPointer<ScintillaNext>> it(editorsByPath);
+    while (it.hasNext()) {
+        it.next();
+        if (it.value() == editor) {
+            it.remove();
+        }
+    }
+
+    // Add new entry if editor is a file
+    if (editor->isFile()) {
+        QString canonicalPath = editor->getFileInfo().canonicalFilePath();
+        editorsByPath.insert(canonicalPath, QPointer<ScintillaNext>(editor));
     }
 }

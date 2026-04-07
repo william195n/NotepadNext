@@ -22,6 +22,7 @@
 
 #include <QScrollBar>
 #include <QPointer>
+#include <QTimer>
 
 #include "EditorDecorator.h"
 
@@ -41,6 +42,7 @@ public slots:
 
 private:
     HighlightedScrollBar *scrollBar;
+    QTimer *updateTimer;
 };
 
 

@@ -22,6 +22,7 @@
 
 #include <QObject>
 #include <QList>
+#include <QSet>
 
 class ApplicationSettings;
 
@@ -46,6 +47,7 @@ public slots:
 private:
     ApplicationSettings *settings;
     QStringList recentFiles;
+    QSet<QString> recentFilesSet;
 };
 
 #endif // RECENTFILESLISTMANAGER_H

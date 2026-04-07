@@ -22,6 +22,7 @@
 
 #include <QObject>
 #include <QPointer>
+#include <QHash>
 
 
 class ApplicationSettings;
@@ -50,8 +51,10 @@ private:
     void purgeOldEditorPointers();
     QList<QPointer<ScintillaNext>> getEditors();
     int detectEOLMode(ScintillaNext *editor) const;
+    void updateEditorPath(ScintillaNext *editor);
 
     QList<QPointer<ScintillaNext>> editors;
+    QHash<QString, QPointer<ScintillaNext>> editorsByPath;
     ApplicationSettings *settings;
 };
 

@@ -43,7 +43,10 @@ void Finder::setWrap(bool wrap)
 
 void Finder::setSearchText(const QString &text)
 {
-    this->text = text;
+    if (this->text != text) {
+        this->text = text;
+        textChanged = true;
+    }
 }
 
 Sci_CharacterRange Finder::findNext(int startPos)

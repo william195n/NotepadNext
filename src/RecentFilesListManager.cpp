@@ -30,27 +30,34 @@ void RecentFilesListManager::addFile(const QString &filePath)
 {
     qInfo(Q_FUNC_INFO);
 
-    // Attempt to remove it first to make sure it is not added twice
-    removeFile(filePath);
+    // O(1) check if file already exists
+    if (recentFilesSet.contains(filePath)) {
+        recentFiles.removeOne(filePath);
+        recentFilesSet.remove(filePath);
+    }
 
     // Set a limit on how many can be in the list (configurable)
     int maxFiles = settings->maxRecentFiles();
     if (recentFiles.size() >= maxFiles) {
-        recentFiles.removeLast();
+        QString removed = recentFiles.takeLast();
+        recentFilesSet.remove(removed);
     }
 
     recentFiles.prepend(filePath);
+    recentFilesSet.insert(filePath);
 }
 
 void RecentFilesListManager::removeFile(const QString &filePath)
 {
     recentFiles.removeOne(filePath);
+    recentFilesSet.remove(filePath);
 }
 
 void RecentFilesListManager::clear()
 {
     // Clear the file list
     recentFiles.clear();
+    recentFilesSet.clear();
 }
 
 QString RecentFilesListManager::mostRecentFile() const
@@ -69,4 +76,5 @@ void RecentFilesListManager::setFileList(const QStringList &list)
 {
     clear();
     recentFiles.append(list);
+    recentFilesSet = QSet<QString>(list.begin(), list.end());
 }

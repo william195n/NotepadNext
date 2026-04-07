@@ -54,14 +54,20 @@ private:
     bool wrap = false;
     int search_flags = 0;
     QString text;
+    QByteArray cachedUtf8Text;
+    bool textChanged = true;
 };
 
 
 template<typename Func>
 void Finder::forEachMatchInRange(Func callback, Sci_CharacterRange range)
 {
+    if (textChanged) {
+        cachedUtf8Text = text.toUtf8();
+        textChanged = false;
+    }
     editor->setSearchFlags(search_flags);
-    editor->forEachMatchInRange(text.toUtf8(), callback, range);
+    editor->forEachMatchInRange(cachedUtf8Text, callback, range);
 }
 
 #endif // FINDER_H

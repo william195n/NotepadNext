@@ -35,6 +35,12 @@ HighlightedScrollBarDecorator::HighlightedScrollBarDecorator(ScintillaNext *edit
     connect(scrollBar, &QScrollBar::valueChanged, editor, &ScintillaEditBase::scrollVertical);
 
     editor->setVerticalScrollBar(scrollBar);
+
+    // Setup debounced update timer to avoid laggy typing
+    updateTimer = new QTimer(this);
+    updateTimer->setSingleShot(true);
+    updateTimer->setInterval(100);  // 100ms delay
+    connect(updateTimer, &QTimer::timeout, scrollBar, QOverload<>::of(&QWidget::update));
 }
 
 HighlightedScrollBarDecorator::~HighlightedScrollBarDecorator()
@@ -44,10 +50,10 @@ HighlightedScrollBarDecorator::~HighlightedScrollBarDecorator()
 void HighlightedScrollBarDecorator::notify(const NotificationData *pscn)
 {
     if (pscn->nmhdr.code == Notification::UpdateUI && (FlagSet(pscn->updated, Update::Content) || FlagSet(pscn->updated, Update::Selection))) {
-        scrollBar->update();
+        updateTimer->start();  // Debounce updates
     }
     else if (pscn->nmhdr.code == Notification::Modified && FlagSet(pscn->modificationType, ModificationFlags::ChangeMarker)) {
-        scrollBar->update();
+        updateTimer->start();  // Debounce updates
     }
 }
 
