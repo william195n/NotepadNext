@@ -80,6 +80,9 @@ DockedEditor::DockedEditor(QWidget *parent) : QObject(parent)
         DockedEditorTitleBar *titleBar = qobject_cast<DockedEditorTitleBar *>(DockArea->titleBar());
         connect(titleBar, &DockedEditorTitleBar::doubleClicked, this, &DockedEditor::titleBarDoubleClicked);
 
+        // Connect the new tab button to trigger new file creation (like Ctrl+N)
+        connect(titleBar, &DockedEditorTitleBar::newTabRequested, this, &DockedEditor::titleBarDoubleClicked);
+
         connect(DockArea->titleBar()->tabBar(), &ads::CDockAreaTabBar::tabMoved, this, [=](int from, int to) {
             Q_UNUSED(from);
             Q_UNUSED(to);

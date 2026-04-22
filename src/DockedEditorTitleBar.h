@@ -22,16 +22,21 @@
 
 
 #include <DockAreaTitleBar.h>
+#include <QPushButton>
 
 class DockedEditorTitleBar : public ads::CDockAreaTitleBar
 {
     Q_OBJECT
 
+private:
+    QPushButton *newTabButton = Q_NULLPTR;
+
 public:
-    explicit DockedEditorTitleBar(ads::CDockAreaWidget* parent) : ads::CDockAreaTitleBar(parent) {}
+    explicit DockedEditorTitleBar(ads::CDockAreaWidget* parent);
 
 signals:
     void doubleClicked();
+    void newTabRequested();
 
 protected:
     void mouseDoubleClickEvent(QMouseEvent *event) {

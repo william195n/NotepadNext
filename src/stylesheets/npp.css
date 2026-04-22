@@ -75,3 +75,53 @@ ads--CDockWidgetTab[activeTab="false"] QLabel {
     border-bottom: 3px solid blue;
     background: palette(window);
 }
+
+/* Wider scrollbars for better usability */
+QScrollBar:horizontal {
+    height: 18px;
+    background: palette(base);
+    border: 1px solid darkgray;
+}
+
+QScrollBar:vertical {
+    width: 18px;
+    background: palette(base);
+    border: 1px solid darkgray;
+}
+
+QScrollBar::handle:horizontal {
+    background: rgb(192, 192, 192);
+    min-width: 20px;
+    border: 1px solid gray;
+}
+
+QScrollBar::handle:vertical {
+    background: rgb(192, 192, 192);
+    min-height: 20px;
+    border: 1px solid gray;
+}
+
+QScrollBar::handle:horizontal:hover,
+QScrollBar::handle:vertical:hover {
+    background: rgb(160, 160, 160);
+}
+
+QScrollBar::handle:horizontal:pressed,
+QScrollBar::handle:vertical:pressed {
+    background: rgb(128, 128, 128);
+}
+
+QScrollBar::add-line:horizontal,
+QScrollBar::sub-line:horizontal,
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    background: rgb(220, 220, 220);
+    border: 1px solid gray;
+}
+
+QScrollBar::add-line:horizontal:hover,
+QScrollBar::sub-line:horizontal:hover,
+QScrollBar::add-line:vertical:hover,
+QScrollBar::sub-line:vertical:hover {
+    background: rgb(192, 192, 192);
+}

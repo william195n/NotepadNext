@@ -61,6 +61,7 @@ qt_add_executable(NotepadNext
 	DebugManager.cpp
 	DefaultDirectoryManager.cpp
 	DockedEditor.cpp
+	DockedEditorTitleBar.cpp
 
 	EditorManager.cpp
 	EditorPrintPreviewRenderer.cpp
