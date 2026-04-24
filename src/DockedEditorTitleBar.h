@@ -30,6 +30,8 @@ class DockedEditorTitleBar : public ads::CDockAreaTitleBar
 
 private:
     QPushButton *newTabButton = Q_NULLPTR;
+    QPushButton *scrollLeftButton = Q_NULLPTR;
+    QPushButton *scrollRightButton = Q_NULLPTR;
 
 public:
     explicit DockedEditorTitleBar(ads::CDockAreaWidget* parent);

@@ -20,6 +20,8 @@
 #include "DockedEditorTitleBar.h"
 #include <QHBoxLayout>
 #include <QStyle>
+#include <DockAreaTabBar.h>
+#include <QScrollBar>
 
 DockedEditorTitleBar::DockedEditorTitleBar(ads::CDockAreaWidget* parent)
     : ads::CDockAreaTitleBar(parent)
@@ -56,14 +58,97 @@ DockedEditorTitleBar::DockedEditorTitleBar(ads::CDockAreaWidget* parent)
     // When clicked, fires the newTabRequested signal
     connect(newTabButton, &QPushButton::clicked, this, &DockedEditorTitleBar::newTabRequested);
 
-    // Insert the button into the title bar's layout
+    // Create scroll left button (◀ arrow for navigating tabs)
+    // Like a "previous page" button in a database result grid
+    scrollLeftButton = new QPushButton("<", this);
+    scrollLeftButton->setObjectName("scrollLeftButton");
+    scrollLeftButton->setFixedSize(22, 22);
+    scrollLeftButton->setToolTip(tr("Scroll tabs left"));
+    scrollLeftButton->setFocusPolicy(Qt::NoFocus);
+    scrollLeftButton->setStyleSheet(
+        "QPushButton#scrollLeftButton {"
+        "    background: rgb(192, 192, 192);"
+        "    border: 1px solid gray;"
+        "    border-radius: 2px;"
+        "    font-weight: bold;"
+        "    padding: 0px;"
+        "    margin: 2px;"
+        "}"
+        "QPushButton#scrollLeftButton:hover {"
+        "    background: rgb(160, 160, 160);"
+        "}"
+        "QPushButton#scrollLeftButton:pressed {"
+        "    background: rgb(128, 128, 128);"
+        "}"
+    );
+
+    // Create scroll right button (▶ arrow for navigating tabs)
+    // Like a "next page" button in a database result grid
+    scrollRightButton = new QPushButton(">", this);
+    scrollRightButton->setObjectName("scrollRightButton");
+    scrollRightButton->setFixedSize(22, 22);
+    scrollRightButton->setToolTip(tr("Scroll tabs right"));
+    scrollRightButton->setFocusPolicy(Qt::NoFocus);
+    scrollRightButton->setStyleSheet(
+        "QPushButton#scrollRightButton {"
+        "    background: rgb(192, 192, 192);"
+        "    border: 1px solid gray;"
+        "    border-radius: 2px;"
+        "    font-weight: bold;"
+        "    padding: 0px;"
+        "    margin: 2px;"
+        "}"
+        "QPushButton#scrollRightButton:hover {"
+        "    background: rgb(160, 160, 160);"
+        "}"
+        "QPushButton#scrollRightButton:pressed {"
+        "    background: rgb(128, 128, 128);"
+        "}"
+    );
+
+    // Connect scroll buttons to tab bar scrolling functionality
+    // When clicked, shift the visible tab window left/right
+    // Similar to scrolling through columns in a wide database view
+    connect(scrollLeftButton, &QPushButton::clicked, this, [this, parent]() {
+        ads::CDockAreaTabBar* tabBar = parent->titleBar()->tabBar();
+        if (tabBar) {
+            // Scroll left by moving the horizontal scrollbar
+            // Like moving the viewport left in a scrollable data grid
+            int currentValue = tabBar->tabAt(QPoint(0, 0));
+            if (currentValue > 0) {
+                tabBar->setCurrentIndex(currentValue - 1);
+            }
+        }
+    });
+
+    connect(scrollRightButton, &QPushButton::clicked, this, [this, parent]() {
+        ads::CDockAreaTabBar* tabBar = parent->titleBar()->tabBar();
+        if (tabBar) {
+            // Scroll right by moving the horizontal scrollbar
+            // Like moving the viewport right in a scrollable data grid
+            int currentValue = tabBar->tabAt(QPoint(0, 0));
+            int maxValue = tabBar->count() - 1;
+            if (currentValue < maxValue) {
+                tabBar->setCurrentIndex(currentValue + 1);
+            }
+        }
+    });
+
+    // Insert the buttons into the title bar's layout
     // The title bar layout typically has: [tabs] [spacer] [close button]
-    // We want: [tabs] [+] [spacer] [close button]
+    // We want: [scroll-left] [tabs] [scroll-right] [+] [spacer] [close button]
     QBoxLayout* layout = qobject_cast<QBoxLayout*>(this->layout());
     if (layout) {
         // Insert before the last item (which is usually the close button or spacer)
         // Count - 1 gives us the position just before the end
         int insertPos = layout->count() > 0 ? layout->count() - 1 : 0;
+
+        // Add scroll buttons before tabs
+        // Position 0 = beginning of layout (before tabs)
+        layout->insertWidget(0, scrollLeftButton);
+        layout->insertWidget(1, scrollRightButton);
+
+        // Add new tab button at the end (before close button)
         layout->insertWidget(insertPos, newTabButton);
     }
 }
