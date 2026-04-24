@@ -20,6 +20,7 @@
 #include "DockedEditorTitleBar.h"
 #include <QHBoxLayout>
 #include <QStyle>
+#include <DockAreaWidget.h>
 #include <DockAreaTabBar.h>
 #include <QScrollBar>
 
