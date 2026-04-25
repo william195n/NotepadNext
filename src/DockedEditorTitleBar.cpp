@@ -113,11 +113,10 @@ DockedEditorTitleBar::DockedEditorTitleBar(ads::CDockAreaWidget* parent)
     connect(scrollLeftButton, &QPushButton::clicked, this, [this, parent]() {
         ads::CDockAreaTabBar* tabBar = parent->titleBar()->tabBar();
         if (tabBar) {
-            // Scroll left by moving the horizontal scrollbar
-            // Like moving the viewport left in a scrollable data grid
-            int currentValue = tabBar->tabAt(QPoint(0, 0));
-            if (currentValue > 0) {
-                tabBar->setCurrentIndex(currentValue - 1);
+            // Scroll left by finding the first visible tab and moving to previous
+            int currentIndex = tabBar->currentIndex();
+            if (currentIndex > 0) {
+                tabBar->setCurrentIndex(currentIndex - 1);
             }
         }
     });
@@ -125,31 +124,28 @@ DockedEditorTitleBar::DockedEditorTitleBar(ads::CDockAreaWidget* parent)
     connect(scrollRightButton, &QPushButton::clicked, this, [this, parent]() {
         ads::CDockAreaTabBar* tabBar = parent->titleBar()->tabBar();
         if (tabBar) {
-            // Scroll right by moving the horizontal scrollbar
-            // Like moving the viewport right in a scrollable data grid
-            int currentValue = tabBar->tabAt(QPoint(0, 0));
-            int maxValue = tabBar->count() - 1;
-            if (currentValue < maxValue) {
-                tabBar->setCurrentIndex(currentValue + 1);
+            // Scroll right by moving to next tab
+            int currentIndex = tabBar->currentIndex();
+            int maxIndex = tabBar->count() - 1;
+            if (currentIndex < maxIndex) {
+                tabBar->setCurrentIndex(currentIndex + 1);
             }
         }
     });
 
     // Insert the buttons into the title bar's layout
     // The title bar layout typically has: [tabs] [spacer] [close button]
-    // We want: [scroll-left] [tabs] [scroll-right] [+] [spacer] [close button]
+    // We want: [tabs] [spacer] [scroll-left] [scroll-right] [+] [close button]
     QBoxLayout* layout = qobject_cast<QBoxLayout*>(this->layout());
     if (layout) {
         // Insert before the last item (which is usually the close button or spacer)
         // Count - 1 gives us the position just before the end
         int insertPos = layout->count() > 0 ? layout->count() - 1 : 0;
 
-        // Add scroll buttons before tabs
-        // Position 0 = beginning of layout (before tabs)
-        layout->insertWidget(0, scrollLeftButton);
-        layout->insertWidget(1, scrollRightButton);
-
-        // Add new tab button at the end (before close button)
-        layout->insertWidget(insertPos, newTabButton);
+        // Add all buttons at the end (before close button)
+        // Order: scroll-left, scroll-right, new-tab
+        layout->insertWidget(insertPos, scrollLeftButton);
+        layout->insertWidget(insertPos + 1, scrollRightButton);
+        layout->insertWidget(insertPos + 2, newTabButton);
     }
 }

@@ -18,14 +18,14 @@ add features:
 14. feat: make auto-completion trigger threshold configurable (1-5 characters, default 3)
 15. feat: add UPPERCASE and lowercase to right-click context menu (quick text case conversion)
 16. feat: add horizontal scroll arrows for tab navigation (< > buttons for browsing tabs when many files are open)
+17. fix: fix tab scroll button logic and position (< > buttons now work correctly and positioned at right side before close button)
 
 -----------------------------------------------------------------
 git add src/dialogs/MainWindow.cpp
 git commit -m "feat: change save prompt to Yes/No/Cancel and add Y/N/C shortcuts"
 git push origin master
 
-git push https://william195n:ghp_@github.com/william195n/NotepadNext.git master
-https://github.com/settings/tokens
+git push https://william195n:<YOUR_TOKEN>@github.com/william195n/NotepadNext.git master
 
 ----init
 # 重命名现有的 origin 为 upstream
