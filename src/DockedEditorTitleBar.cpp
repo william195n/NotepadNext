@@ -135,17 +135,30 @@ DockedEditorTitleBar::DockedEditorTitleBar(ads::CDockAreaWidget* parent)
 
     // Insert the buttons into the title bar's layout
     // The title bar layout typically has: [tabs] [spacer] [close button]
-    // We want: [tabs] [spacer] [scroll-left] [scroll-right] [+] [close button]
+    // We want: [tabs] [+] [spacer] [< >] [close button]
     QBoxLayout* layout = qobject_cast<QBoxLayout*>(this->layout());
     if (layout) {
-        // Insert before the last item (which is usually the close button or spacer)
-        // Count - 1 gives us the position just before the end
-        int insertPos = layout->count() > 0 ? layout->count() - 1 : 0;
+        // Find the tab bar widget position
+        int tabBarIndex = -1;
+        for (int i = 0; i < layout->count(); ++i) {
+            QLayoutItem* item = layout->itemAt(i);
+            if (item && item->widget()) {
+                ads::CDockAreaTabBar* tabBar = qobject_cast<ads::CDockAreaTabBar*>(item->widget());
+                if (tabBar) {
+                    tabBarIndex = i;
+                    break;
+                }
+            }
+        }
 
-        // Add all buttons at the end (before close button)
-        // Order: scroll-left, scroll-right, new-tab
+        if (tabBarIndex >= 0) {
+            // Add new tab button right after the tab bar
+            layout->insertWidget(tabBarIndex + 1, newTabButton);
+        }
+
+        // Add scroll buttons at the end (before close button)
+        int insertPos = layout->count() > 0 ? layout->count() - 1 : 0;
         layout->insertWidget(insertPos, scrollLeftButton);
         layout->insertWidget(insertPos + 1, scrollRightButton);
-        layout->insertWidget(insertPos + 2, newTabButton);
     }
 }

@@ -19,6 +19,7 @@ add features:
 15. feat: add UPPERCASE and lowercase to right-click context menu (quick text case conversion)
 16. feat: add horizontal scroll arrows for tab navigation (< > buttons for browsing tabs when many files are open)
 17. fix: fix tab scroll button logic and position (< > buttons now work correctly and positioned at right side before close button)
+18. feat: reposition new tab button to follow tabs closely (+ button now placed right after tab bar instead of far right)
 
 -----------------------------------------------------------------
 git add src/dialogs/MainWindow.cpp
