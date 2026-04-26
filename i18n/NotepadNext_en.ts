@@ -38,6 +38,24 @@
     </message>
 </context>
 <context>
+    <name>DockedEditorTitleBar</name>
+    <message>
+        <location filename="../src/DockedEditorTitleBar.cpp" line="35"/>
+        <source>New File (Ctrl+N)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/DockedEditorTitleBar.cpp" line="67"/>
+        <source>Scroll tabs left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/DockedEditorTitleBar.cpp" line="91"/>
+        <source>Scroll tabs right</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>EditorInfoStatusBar</name>
     <message>
         <location filename="../src/widgets/EditorInfoStatusBar.cpp" line="100"/>
