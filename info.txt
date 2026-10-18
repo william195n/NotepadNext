@@ -28,6 +28,8 @@ git push origin master
 
 git push https://william195n:<YOUR_TOKEN>@github.com/william195n/NotepadNext.git master
 
+修改代码  →  git push  →  GitHub Actions 自动编译  →  下载编译好的文件
+
 ----init
 # 重命名现有的 origin 为 upstream
 git remote rename origin upstream
@@ -45,6 +47,17 @@ origin		https://github.com/william195n/NotepadNext.git (fetch)
 origin		https://github.com/william195n/NotepadNext.git (push)
 upstream	https://github.com/dail8859/NotepadNext.git (fetch)
 upstream	https://github.com/dail8859/NotepadNext.git (push)
+
+-------------------------------1. 修改代码后推送
+git add .
+git commit -m "feat: xxx"
+git push   # 推送到 origin (你自己的 william195n/NotepadNext)
+
+-------------------------------2. GitHub Actions 自动触发编译
+https://github.com/william195n/NotepadNext/actions
+
+-------------------------------3. 下载编译好的 Artifact
+下载 NotepadNext-Windows-Qt6.8-Installer
 
 -----------------------------------------------------------------
 这是一个轻量级的文本编辑器，叫 NotepadNext. 我安装了这个软件在我的机器上。
