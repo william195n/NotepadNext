@@ -20,6 +20,7 @@ add features:
 16. feat: add horizontal scroll arrows for tab navigation (< > buttons for browsing tabs when many files are open)
 17. fix: fix tab scroll button logic and position (< > buttons now work correctly and positioned at right side before close button)
 18. feat: reposition new tab button to follow tabs closely (+ button now placed right after tab bar instead of far right)
+19. feat: auto-detect UTF-8 without BOM encoding to prevent CJK character garbling (fix GBK decoding issue)
 
 -----------------------------------------------------------------
 git add src/dialogs/MainWindow.cpp

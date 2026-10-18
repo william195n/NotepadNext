@@ -117,6 +117,9 @@ ScintillaNext::ScintillaNext(QString name, QWidget *parent) :
     indicatorResources.disableRange(0, 7);
     indicatorResources.disableRange(INDICATOR_IME, INDICATOR_IME_MAX);
     indicatorResources.disableRange(INDICATOR_HISTORY_REVERTED_TO_ORIGIN_INSERTION, INDICATOR_HISTORY_REVERTED_TO_MODIFIED_DELETION);
+
+    // Default to UTF-8 for all new documents
+    setCodePage(SC_CP_UTF8);
 }
 
 ScintillaNext::~ScintillaNext()
@@ -671,6 +674,13 @@ bool ScintillaNext::readFromDisk(QFile &file)
     default:
         bomType = BomType::None;
         break;
+    }
+
+    // Set document code page based on BOM or UTF-8 detection
+    if (metadata->bom != FileLoader::BomType::None || metadata->isUtf8) {
+        setCodePage(SC_CP_UTF8);
+    } else {
+        setCodePage(0);
     }
 
     // Set read-only if needed

@@ -50,6 +50,7 @@ public:
         qint64 totalBytesRead = 0;
         bool isReadOnly = false;
         bool wasConverted = false; // True if encoding conversion was performed
+        bool isUtf8 = true;        // True if detected as valid UTF-8 (with or without BOM)
     };
 
     /**
@@ -90,6 +91,15 @@ public:
      * @return Converted UTF-8 data, or empty QByteArray on error
      */
     static QByteArray convertUtf16ToUtf8(const QByteArray &data, BomType bom);
+
+    /**
+     * @brief Validate whether byte buffer contains valid UTF-8 sequences
+     * @param data Pointer to raw byte data
+     * @param length Number of bytes to check
+     * @param hasMultiByte Output flag set to true if multi-byte sequences were found
+     * @return true if bytes conform to UTF-8 specification, false otherwise
+     */
+    static bool isValidUtf8(const char *data, qint64 length, bool &hasMultiByte);
 
 private:
     static const QByteArray BOM_UTF8;

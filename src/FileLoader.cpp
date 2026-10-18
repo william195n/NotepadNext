@@ -89,6 +89,16 @@ FileLoader::FileMetadata* FileLoader::loadFile(QFile &file,
             // Remove BOM from UTF-8 files
             if (detectedBom == BomType::Utf8) {
                 removeBom(chunk, detectedBom);
+                metadata->isUtf8 = true;
+            } else {
+                // No BOM detected: inspect the initial bytes for UTF-8 validity
+                bool hasMultiByte = false;
+                // Check up to 256KB of the first chunk to determine encoding
+                qint64 checkLen = qMin<qint64>(chunk.size(), 256 * 1024);
+                metadata->isUtf8 = isValidUtf8(chunk.constData(), checkLen, hasMultiByte);
+                qDebug("FileLoader: No BOM, UTF-8 validation result: %s (multi-byte: %s)",
+                       metadata->isUtf8 ? "valid" : "invalid",
+                       hasMultiByte ? "yes" : "no");
             }
         }
 
@@ -273,3 +283,69 @@ FileLoader::FileMetadata* FileLoader::loadUtf16File(QFile &file, BomType bomType
 
     return metadata;
 }
+
+bool FileLoader::isValidUtf8(const char *data, qint64 length, bool &hasMultiByte)
+{
+    hasMultiByte = false;
+    if (!data || length <= 0) {
+        return true;
+    }
+
+    const unsigned char *p = reinterpret_cast<const unsigned char*>(data);
+    const unsigned char *end = p + length;
+
+    while (p < end) {
+        unsigned char c = *p++;
+        if (c <= 0x7F) {
+            // ASCII character
+            continue;
+        }
+
+        hasMultiByte = true;
+
+        if (c >= 0xC2 && c <= 0xDF) {
+            // 2-byte sequence: 110xxxxx 10xxxxxx
+            if (p >= end) {
+                // Truncated at end of buffer
+                break;
+            }
+            if ((*p & 0xC0) != 0x80) {
+                return false;
+            }
+            p++;
+        } else if (c >= 0xE0 && c <= 0xEF) {
+            // 3-byte sequence: 1110xxxx 10xxxxxx 10xxxxxx
+            if (p + 1 >= end) {
+                // Truncated at end of buffer
+                break;
+            }
+            unsigned char c1 = *p++;
+            unsigned char c2 = *p++;
+            if ((c1 & 0xC0) != 0x80 || (c2 & 0xC0) != 0x80) {
+                return false;
+            }
+            if (c == 0xE0 && c1 < 0xA0) return false; // Overlong encoding
+            if (c == 0xED && c1 > 0x9F) return false; // UTF-16 surrogate
+        } else if (c >= 0xF0 && c <= 0xF4) {
+            // 4-byte sequence: 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+            if (p + 2 >= end) {
+                // Truncated at end of buffer
+                break;
+            }
+            unsigned char c1 = *p++;
+            unsigned char c2 = *p++;
+            unsigned char c3 = *p++;
+            if ((c1 & 0xC0) != 0x80 || (c2 & 0xC0) != 0x80 || (c3 & 0xC0) != 0x80) {
+                return false;
+            }
+            if (c == 0xF0 && c1 < 0x90) return false; // Overlong encoding
+            if (c == 0xF4 && c1 > 0x8F) return false; // Exceeds U+10FFFF
+        } else {
+            // 0x80..0xC1, 0xF5..0xFF are invalid lead bytes in UTF-8
+            return false;
+        }
+    }
+
+    return true;
+}
+
