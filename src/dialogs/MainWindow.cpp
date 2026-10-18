@@ -2091,6 +2091,10 @@ void MainWindow::addEditor(ScintillaNext *editor)
 
 void MainWindow::checkForUpdates(bool silent)
 {
+    // Disabled: this fork does not use the upstream update server
+    Q_UNUSED(silent);
+    return;
+
 #ifdef Q_OS_WIN
     qInfo(Q_FUNC_INFO);
 
